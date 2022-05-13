@@ -22,10 +22,14 @@ class WeatherApiController extends AbstractController
             if ($date) {
                 $date = new \DateTime($date);
 
-                return $this->json($weatherService->getWeather($city, $date));
+                $data = $weatherService->getWeather($city, $date);
+            } else {
+                $data = $weatherService->getWeather($city);
             }
 
-            return $this->json($weatherService->getWeather($city));
+            return $this->json([
+                'data' => $data,
+            ]);
         } catch (CityNotFoundException | InvalidDateException $e) {
             return $this->json([], 204);
         } catch (\Exception $exception) {

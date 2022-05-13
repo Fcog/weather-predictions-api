@@ -29,10 +29,12 @@ class WeatherEndpointTest extends WebTestCase
         // Set data
         $today = new \DateTime();
 
-        $expectedResult = json_encode([
+        $data = [
             "The weather in Amsterdam on {$today->format('F d, Y')} at 00:00 is 10 ºC",
             "The weather in Amsterdam on {$today->format('F d, Y')} at 01:00 is 11 ºC",
-        ]);
+        ];
+
+        $expectedResult = json_encode(['data' => $data]);
 
         // Do operations
         $this->client->request('GET', '/api/weather/amsterdam');
@@ -62,10 +64,12 @@ class WeatherEndpointTest extends WebTestCase
         $dateRequested = new \DateTime();
         $dateRequested->modify("+{$dayNumber} day");
 
-        $expectedResult = json_encode([
+        $data = [
             "The weather in Amsterdam on {$dateRequested->format('F d, Y')} at 11:00 is 5 ºC",
             "The weather in Amsterdam on {$dateRequested->format('F d, Y')} at 12:00 is 3 ºC",
-        ]);
+        ];
+
+        $expectedResult = json_encode(['data' => $data]);
 
         // Do operations
         $this->client->request('GET', '/api/weather/amsterdam?date=' . $dateRequested->format('Y-m-d'));
