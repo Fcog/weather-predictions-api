@@ -7,13 +7,23 @@ use App\Entity\Partner;
 class BBC extends Partner
 {
 
-    public function decodeMetaData(): void
+    public function decodeMetaData(array $data): array
     {
-        // TODO: Implement decodeMetaData() method.
+        $encodedData = $this->fetchData();
+
+        // TODO deserialize into Partner object
+        $decodedData = [];
+
+        return $decodedData;
     }
 
-    public function decodePredictions(): void
+    public function decodePredictions(array $data): array
     {
-        // TODO: Implement decodePredictions() method.
+        $encodedData = $this->fetchData();
+
+        // TODO deserialize into Partner object
+        $decodedData = [];
+
+        return $decodedData;
     }
 }

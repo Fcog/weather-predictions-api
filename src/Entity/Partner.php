@@ -3,16 +3,20 @@
 namespace App\Entity;
 
 use App\Enums\InputFormat;
+use App\Exception\PartnerApiDataFetchException;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 abstract class Partner
 {
-    private int $id;
-
-    private string $name;
-
-    private string $api_url;
-
-    private InputFormat $format;
+    public function __construct(
+        private HttpClientInterface $client,
+        private int $id,
+        private string $name,
+        private string $api_url,
+        private InputFormat $format
+    )
+    {
+    }
 
     public function setId(int $id): self
     {
@@ -62,7 +66,21 @@ abstract class Partner
         return $this;
     }
 
-    public abstract function decodeMetaData(): void;
+    /**
+     * @throws PartnerApiDataFetchException
+     */
+    public function fetchData(): array
+    {
+        try {
+            $response = $this->client->request('GET', $this->getApiUrl());
 
-    public abstract function decodePredictions(): void;
+            return $response->toArray();
+        } catch (\Throwable) {
+            throw new PartnerApiDataFetchException();
+        }
+    }
+
+    public abstract function decodeMetaData(array $data): array;
+
+    public abstract function decodePredictions(array $data): array;
 }

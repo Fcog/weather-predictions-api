@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Contract\DataCollection;
+use App\Exception\PartnerApiDataFetchException;
 use App\Repository\PartnerRepository;
 
 class ApiDataCollectionService implements DataCollection
@@ -13,12 +14,17 @@ class ApiDataCollectionService implements DataCollection
     {
     }
 
+    /**
+     * @throws PartnerApiDataFetchException
+     */
     public function collect()
     {
         $partners = $this->partnerRepository->getAll();
 
         foreach ($partners as $partner) {
-            $partner->getApiUrl();
+            $encodedData = $partner->fetchData();
+            $decodedMetaData = $partner->decodeMetaData($encodedData);
+            $decodedPredictionsData = $partner->decodePredictions($encodedData);
         }
     }
 }

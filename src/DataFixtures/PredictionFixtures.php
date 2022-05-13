@@ -7,26 +7,33 @@ use App\Entity\Partner;
 use App\Entity\Prediction;
 use App\Enums\InputFormat;
 use App\ObjectValue\Celsius;
+use App\Service\PartnerFactoryService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 class PredictionFixtures extends Fixture
 {
+    public function __construct(
+        private PartnerFactoryService $partnerFactory
+    )
+    {
+    }
+
     public function load(ObjectManager $manager): void
     {
         // --------- Partners ----------------
-
-        $partner = new Partner\BBC();
-        $partner->setId(1);
-        $partner->setName('BBC');
-        $partner->setApiUrl('https://bbc.com/weather');
-        $partner->setFormat(InputFormat::JSON);
-
-        $partner = new Partner\WeatherDotCom();
-        $partner->setId(2);
-        $partner->setName('weather.com');
-        $partner->setApiUrl('https://weather.com/weather');
-        $partner->setFormat(InputFormat::CSV);
+        $this->partnerFactory->create(
+            1,
+            'bbc',
+            'https://bbc.com/weather',
+            InputFormat::JSON
+        );
+        $this->partnerFactory->create(
+            2,
+            'weather.com',
+            'https://weather.com/weather',
+            InputFormat::CSV
+        );
 
         // --------- Today's predictions ----------------
 
