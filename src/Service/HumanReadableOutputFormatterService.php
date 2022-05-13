@@ -1,12 +1,12 @@
 <?php
 
-namespace App\ObjectValue;
+namespace App\Service;
 
 use App\Contract\OutputFormatter;
 use App\Contract\TempScaleFactory;
 use App\Exception\NonExistentTempScaleException;
 
-class HumanReadableOutput implements OutputFormatter
+class HumanReadableOutputFormatterService implements OutputFormatter
 {
     public function __construct(
         private TempScaleFactory $tempScaleFactory
