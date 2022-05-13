@@ -27,6 +27,10 @@ class Prediction
     #[ORM\JoinColumn(nullable: false)]
     private $location;
 
+    #[ORM\ManyToOne(targetEntity: Partner::class, inversedBy: 'predictions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $partner;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +80,18 @@ class Prediction
     public function setLocation(?Location $location): self
     {
         $this->location = $location;
+
+        return $this;
+    }
+
+    public function getPartner(): ?Partner
+    {
+        return $this->partner;
+    }
+
+    public function setPartner(?Partner $partner): self
+    {
+        $this->partner = $partner;
 
         return $this;
     }

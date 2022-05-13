@@ -2,13 +2,13 @@
 
 namespace App\Type;
 
-use App\ObjectValue\Celsius;
+use App\Enums\InputFormat;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
-class TempScaleType extends Type
+class InputFormatType extends Type
 {
-    const MYTYPE = 'tempscale';
+    const MYTYPE = 'inputformat';
 
     public function getName(): string
     {
@@ -17,16 +17,20 @@ class TempScaleType extends Type
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return 'INT';
+        return 'VARCHAR(255)';
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
-        return Celsius::fromCelsius($value);
+        if ($value instanceof InputFormat) {
+            return $value->value;
+        }
+
+        return null;
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return $value->getCelsius();
+        return InputFormat::tryFrom($value);
     }
 }
