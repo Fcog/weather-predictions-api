@@ -7,7 +7,7 @@ use JetBrains\PhpStorm\Pure;
 class Fahrenheit extends TempScale
 {
     #[Pure]
-    private function __construct(int $value)
+    public function __construct(int $value)
     {
         parent::__construct($value, 'ºF');
     }

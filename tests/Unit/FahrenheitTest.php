@@ -20,4 +20,18 @@ class FahrenheitTest extends TestCase
 
         $this->assertEquals(18, $fahrenheit->getCelsius());
     }
+
+    public function test_celsius_to_fahrenheit_convertion(): void
+    {
+        $fahrenheit = Fahrenheit::fromCelsius(0);
+
+        $this->assertEquals(32, $fahrenheit->getValue());
+    }
+
+    public function test_celsius_to_fahrenheit_convertion_with_decimals_rounding_down(): void
+    {
+        $fahrenheit = Fahrenheit::fromCelsius(18);
+
+        $this->assertEquals(64, $fahrenheit->getValue());
+    }
 }
