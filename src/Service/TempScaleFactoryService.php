@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Factory;
+namespace App\Service;
 
+use App\Contract\TempScaleFactory;
 use App\Exception\NonExistentTempScaleException;
 use App\ObjectValue\Celsius;
 use App\ObjectValue\Fahrenheit;
 use App\ObjectValue\Romer;
 use App\ObjectValue\TempScale;
 
-class TempScaleFactory
+class TempScaleFactoryService implements TempScaleFactory
 {
     /**
      * @throws NonExistentTempScaleException

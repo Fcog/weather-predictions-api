@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WeatherController extends AbstractController
+class WeatherApiController extends AbstractController
 {
     #[Route('/api/weather/{city}', name: 'app_weather', methods: ['GET'])]
     public function index(WeatherService $weatherService, string $city): Response

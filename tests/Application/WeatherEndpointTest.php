@@ -24,7 +24,7 @@ class WeatherEndpointTest extends WebTestCase
         ]);
     }
 
-    public function test_successful_city_found(): void
+    public function test_get_predictions_for_city_found(): void
     {
         // Set data
         $today = new \DateTime();
@@ -42,12 +42,29 @@ class WeatherEndpointTest extends WebTestCase
         $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
     }
 
-    public function test_city_not_found(): void
+    public function test_no_predictions_for_city_not_found(): void
     {
         // Set data
         $expectedResult = '';
+
         // Do operations
         $request = $this->client->request('GET', '/api/weather/cali');
+
+        // Assert
+        $this->assertResponseStatusCodeSame(204);
+        $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
+    }
+
+    public function get_predictions_for_day_10(): void
+    {
+        // Set data
+        $dayNumber = 10;
+        $date = new \DateTime();
+        $date = $date->modify("+{$dayNumber} day");
+        $expectedResult = "The weather in Amsterdam on {$date->format('F d, Y')} at 00:00 is 10 ºC";
+
+        // Do operations
+        $request = $this->client->request('GET', '/api/weather/amsterdam?day=' . $dayNumber);
 
         // Assert
         $this->assertResponseStatusCodeSame(204);
