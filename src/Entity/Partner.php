@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enums\InputFormat;
 use App\Repository\PartnerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,9 +21,6 @@ class Partner
 
     #[ORM\Column(type: 'string', length: 255)]
     private $api_url;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private $temp_scale;
 
     #[ORM\Column(type: 'inputformat')]
     private $format;
@@ -64,24 +62,12 @@ class Partner
         return $this;
     }
 
-    public function getTempScale(): ?string
-    {
-        return $this->temp_scale;
-    }
-
-    public function setTempScale(string $temp_scale): self
-    {
-        $this->temp_scale = $temp_scale;
-
-        return $this;
-    }
-
-    public function getFormat(): ?string
+    public function getFormat(): ?InputFormat
     {
         return $this->format;
     }
 
-    public function setFormat(string $format): self
+    public function setFormat(InputFormat $format): self
     {
         $this->format = $format;
 

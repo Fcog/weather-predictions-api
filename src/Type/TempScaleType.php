@@ -25,7 +25,7 @@ class TempScaleType extends Type
         return Celsius::fromCelsius($value);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         return $value->getCelsius();
     }

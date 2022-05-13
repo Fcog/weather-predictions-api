@@ -29,8 +29,8 @@ class InputFormatType extends Type
         return null;
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
-        return InputFormat::tryFrom($value);
+        return $value->value;
     }
 }
