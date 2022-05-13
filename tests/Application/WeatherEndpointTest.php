@@ -95,4 +95,20 @@ class WeatherEndpointTest extends WebTestCase
         $this->assertResponseStatusCodeSame(204);
         $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
     }
+
+    public function test_get_predictions_for_yesterday(): void
+    {
+        // Set data
+        $dayNumber = 1;
+        $dateRequested = new \DateTime('yesterday');
+
+        $expectedResult = '';
+
+        // Do operations
+        $this->client->request('GET', '/api/weather/amsterdam?date=' . $dateRequested->format('Y-m-d'));
+
+        // Assert
+        $this->assertResponseStatusCodeSame(204);
+        $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
+    }
 }

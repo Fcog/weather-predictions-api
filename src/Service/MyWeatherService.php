@@ -63,9 +63,16 @@ class MyWeatherService implements WeatherService
     private function validateDate(\DateTimeInterface $dateRequested): void
     {
         $today = new \DateTime();
-        $limitDate = $today->modify('+' . self::MAX_DAYS . ' day');
+        $limitDate = new \DateTime();
+        $limitDate->modify('+' . self::MAX_DAYS . ' day');
 
-        if ($limitDate < $dateRequested) {
+        $diff = $today->diff($dateRequested);
+        $diffDays = (int) $diff->format( "%R%a" );
+
+        $isDateUnderTheLimit = $diffDays < 0;
+        $isDateOverTheLimit = $diffDays >= self::MAX_DAYS;
+
+        if ($isDateUnderTheLimit || $isDateOverTheLimit) {
             throw new InvalidDateException();
         }
     }
