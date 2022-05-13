@@ -21,7 +21,6 @@ class WeatherEndpointTest extends WebTestCase
 
         $this->databaseTool->loadFixtures([
             LocationFixtures::class,
-            PartnerFixtures::class,
             PredictionFixtures::class,
         ]);
     }

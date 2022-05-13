@@ -20,7 +20,6 @@ class PredictionsTest extends KernelTestCase
 
         $this->databaseTool->loadFixtures([
             LocationFixtures::class,
-            PartnerFixtures::class,
             PredictionFixtures::class,
         ]);
     }

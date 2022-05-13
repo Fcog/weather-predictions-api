@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class DataCollectionTest extends KernelTestCase
 {
-    public function data_is_collected_correctly(): void
+    public function ptest_data_is_collected_correctly(): void
     {
         // Set data
         $dayNumber = 10;

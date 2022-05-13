@@ -3,34 +3,22 @@
 namespace App\Entity;
 
 use App\Enums\InputFormat;
-use App\Repository\PartnerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PartnerRepository::class)]
 class Partner
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private string $name;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $api_url;
+    private string $api_url;
 
-    #[ORM\Column(type: 'inputformat')]
-    private $format;
+    private InputFormat $format;
 
-    #[ORM\OneToMany(mappedBy: 'partner', targetEntity: Prediction::class, orphanRemoval: true)]
-    private $predictions;
-
-    public function __construct()
+    public function setId(int $id): self
     {
-        $this->predictions = new ArrayCollection();
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getId(): ?int
@@ -70,36 +58,6 @@ class Partner
     public function setFormat(InputFormat $format): self
     {
         $this->format = $format;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Prediction>
-     */
-    public function getPredictions(): Collection
-    {
-        return $this->predictions;
-    }
-
-    public function addPrediction(Prediction $prediction): self
-    {
-        if (!$this->predictions->contains($prediction)) {
-            $this->predictions[] = $prediction;
-            $prediction->setPartner($this);
-        }
-
-        return $this;
-    }
-
-    public function removePrediction(Prediction $prediction): self
-    {
-        if ($this->predictions->removeElement($prediction)) {
-            // set the owning side to null (unless already changed)
-            if ($prediction->getPartner() === $this) {
-                $prediction->setPartner(null);
-            }
-        }
 
         return $this;
     }

@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Location;
 use App\Entity\Partner;
 use App\Entity\Prediction;
+use App\Enums\InputFormat;
 use App\ObjectValue\Celsius;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -13,21 +14,33 @@ class PredictionFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        // --------- Partners ----------------
+
+        $partner = new Partner();
+        $partner->setId(1);
+        $partner->setName('BBC');
+        $partner->setApiUrl('https://bbc.com/weather');
+        $partner->setFormat(InputFormat::JSON);
+
+        $partner = new Partner();
+        $partner->setId(2);
+        $partner->setName('weather.com');
+        $partner->setApiUrl('https://weather.com/weather');
+        $partner->setFormat(InputFormat::CSV);
+
         // --------- Today's predictions ----------------
 
         $today = new \DateTime();
         $temp = Celsius::fromCelsius(10);
 
         $location = $manager->getRepository(Location::class)->findOneBy(['name' => 'Amsterdam']);
-        $partner1 = $manager->getRepository(Partner::class)->findOneBy(['name' => 'BBC']);
-        $partner2 = $manager->getRepository(Partner::class)->findOneBy(['name' => 'weather.com']);
 
         $prediction = new Prediction();
         $prediction->setDate($today);
         $prediction->setTime('00:00');
         $prediction->setTemperature($temp);
         $prediction->setLocation($location);
-        $prediction->setPartner($partner1);
+        $prediction->setPartnerId(1);
         $manager->persist($prediction);
 
         $temp = Celsius::fromCelsius(11);
@@ -37,7 +50,7 @@ class PredictionFixtures extends Fixture
         $prediction->setTime('01:00');
         $prediction->setTemperature($temp);
         $prediction->setLocation($location);
-        $prediction->setPartner($partner2);
+        $prediction->setPartnerId(2);
         $manager->persist($prediction);
 
         // --------- Upcoming predictions in day 10 ----------------
@@ -53,7 +66,7 @@ class PredictionFixtures extends Fixture
         $prediction->setTime('11:00');
         $prediction->setTemperature($temp);
         $prediction->setLocation($location);
-        $prediction->setPartner($partner1);
+        $prediction->setPartnerId(1);
         $manager->persist($prediction);
 
         $temp = Celsius::fromCelsius(3);
@@ -63,7 +76,7 @@ class PredictionFixtures extends Fixture
         $prediction->setTime('12:00');
         $prediction->setTemperature($temp);
         $prediction->setLocation($location);
-        $prediction->setPartner($partner2);
+        $prediction->setPartnerId(2);
         $manager->persist($prediction);
 
         $manager->flush();
@@ -73,7 +86,6 @@ class PredictionFixtures extends Fixture
     {
         return [
             LocationFixtures::class,
-            PartnerFixtures::class,
         ];
     }
 }

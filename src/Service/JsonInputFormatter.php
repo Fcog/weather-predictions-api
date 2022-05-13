@@ -2,10 +2,11 @@
 
 namespace App\Service;
 
+use App\Contract\InputFormatter;
 use App\Entity\Prediction;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class JsonInputFormatter
+class JsonInputFormatter implements InputFormatter
 {
     public function __construct(
         private SerializerInterface $serializer
