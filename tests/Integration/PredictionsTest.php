@@ -4,6 +4,7 @@ namespace App\Tests\Integration;
 
 use App\DataFixtures\LocationFixtures;
 use App\DataFixtures\PredictionFixtures;
+use App\Exception\InvalidDateException;
 use App\Service\MyWeatherService;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -36,7 +37,7 @@ class PredictionsTest extends KernelTestCase
         $weatherService = static::getContainer()->get(MyWeatherService::class);
 
         // Assert
-        $this->assertSame($expectedResult, $weatherService->getWeather('Amsterdam', $today));
+        $this->assertSame($expectedResult, $weatherService->getWeather('Amsterdam'));
     }
 
     public function test_get_predictions_for_today_in_fahrenheit(): void
@@ -51,9 +52,10 @@ class PredictionsTest extends KernelTestCase
 
         // Do operations
         $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $result = $weatherService->getWeather('Amsterdam', $today, 'fahrenheit');
 
         // Assert
-        $this->assertSame($expectedResult, $weatherService->getWeather('Amsterdam', $today, 'fahrenheit'));
+        $this->assertSame($expectedResult, $result);
     }
 
     public function test_get_predictions_for_today_in_romer(): void
@@ -68,8 +70,44 @@ class PredictionsTest extends KernelTestCase
 
         // Do operations
         $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $result = $weatherService->getWeather('Amsterdam', $today, 'romer');
 
         // Assert
-        $this->assertSame($expectedResult, $weatherService->getWeather('Amsterdam', $today, 'romer'));
+        $this->assertSame($expectedResult, $result);
+    }
+
+    public function test_get_predictions_for_day_10(): void
+    {
+        // Set data
+        $dayNumber = 10;
+        $date = new \DateTime();
+        $date->modify("+{$dayNumber} day");
+
+        $expectedResult = [
+            "The weather in Amsterdam on {$date->format('F d, Y')} at 11:00 is 5 ºC",
+            "The weather in Amsterdam on {$date->format('F d, Y')} at 12:00 is 3 ºC",
+        ];
+
+        // Do operations
+        $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $result = $weatherService->getWeather('Amsterdam', $date);
+
+        // Assert
+        $this->assertSame($expectedResult, $result);
+    }
+
+    public function test_get_predictions_for_day_11(): void
+    {
+        // Assert exception
+        $this->expectException(InvalidDateException::class);
+
+        // Set data
+        $dayNumber = 11;
+        $date = new \DateTime();
+        $date->modify("+{$dayNumber} day");
+
+        // Do operations
+        $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $weatherService->getWeather('Amsterdam', $date);
     }
 }

@@ -5,12 +5,15 @@ namespace App\Service;
 use App\Contract\OutputFormatter;
 use App\Contract\WeatherService;
 use App\Exception\CityNotFoundException;
+use App\Exception\InvalidDateException;
 use App\Repository\LocationRepository;
 use App\Repository\PredictionRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class MyWeatherService implements WeatherService
 {
+    const MAX_DAYS = 10;
+
     public function __construct(
         private OutputFormatter $outputFormatter,
         private ManagerRegistry $managerRegistry
@@ -20,14 +23,31 @@ class MyWeatherService implements WeatherService
 
     /**
      * @throws CityNotFoundException
+     * @throws InvalidDateException
      */
     public function getWeather(
-        string $city,
-        \DateTimeInterface $date = new \DateTime(),
-        string $selectedTempScale = 'celsius'
+        string $cityRequested,
+        \DateTimeInterface $dateRequested = new \DateTime(),
+        string $tempScaleRequested = 'celsius'
     ): array
     {
         $predictions = new PredictionRepository($this->managerRegistry);
+
+        $this->validateCity($cityRequested);
+
+        $this->validateDate($dateRequested);
+
+        return $this->outputFormatter->output(
+            $predictions->findByCity($cityRequested, $dateRequested),
+            $tempScaleRequested
+        );
+    }
+
+    /**
+     * @throws CityNotFoundException
+     */
+    private function validateCity(string $city): void
+    {
         $cities = new LocationRepository($this->managerRegistry);
 
         $cityFound = $cities->findOneBy(['name' => $city]);
@@ -35,10 +55,18 @@ class MyWeatherService implements WeatherService
         if (!$cityFound) {
             throw new CityNotFoundException();
         }
+    }
 
-        return $this->outputFormatter->output(
-            $predictions->findByCity($city),
-            $selectedTempScale
-        );
+    /**
+     * @throws InvalidDateException
+     */
+    private function validateDate(\DateTimeInterface $dateRequested): void
+    {
+        $today = new \DateTime();
+        $limitDate = $today->modify('+' . self::MAX_DAYS . ' day');
+
+        if ($limitDate < $dateRequested) {
+            throw new InvalidDateException();
+        }
     }
 }

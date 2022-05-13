@@ -42,12 +42,14 @@ class PredictionRepository extends ServiceEntityRepository
     /**
      * @return Prediction[] Returns an array of Prediction objects
      */
-    public function findByCity($city): array
+    public function findByCity(string $city, \DateTimeInterface $date): array
     {
         return $this->createQueryBuilder('p')
             ->join('p.location', 'l')
-            ->andWhere('l.name = :val')
-            ->setParameter('val', $city)
+            ->andWhere('l.name = :city')
+            ->setParameter('city', $city)
+            ->andWhere('p.date = :date')
+            ->setParameter('date', $date)
             ->orderBy('p.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()

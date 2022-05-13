@@ -35,7 +35,7 @@ class WeatherEndpointTest extends WebTestCase
         ]);
 
         // Do operations
-        $request = $this->client->request('GET', '/api/weather/amsterdam');
+        $this->client->request('GET', '/api/weather/amsterdam');
 
         // Assert
         $this->assertResponseStatusCodeSame(200);
@@ -48,23 +48,44 @@ class WeatherEndpointTest extends WebTestCase
         $expectedResult = '';
 
         // Do operations
-        $request = $this->client->request('GET', '/api/weather/cali');
+        $this->client->request('GET', '/api/weather/cali');
 
         // Assert
         $this->assertResponseStatusCodeSame(204);
         $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
     }
 
-    public function get_predictions_for_day_10(): void
+    public function test_get_predictions_for_day_10(): void
     {
         // Set data
         $dayNumber = 10;
-        $date = new \DateTime();
-        $date = $date->modify("+{$dayNumber} day");
-        $expectedResult = "The weather in Amsterdam on {$date->format('F d, Y')} at 00:00 is 10 ºC";
+        $dateRequested = new \DateTime();
+        $dateRequested->modify("+{$dayNumber} day");
+
+        $expectedResult = json_encode([
+            "The weather in Amsterdam on {$dateRequested->format('F d, Y')} at 11:00 is 5 ºC",
+            "The weather in Amsterdam on {$dateRequested->format('F d, Y')} at 12:00 is 3 ºC",
+        ]);
 
         // Do operations
-        $request = $this->client->request('GET', '/api/weather/amsterdam?day=' . $dayNumber);
+        $this->client->request('GET', '/api/weather/amsterdam?date=' . $dateRequested->format('Y-m-d'));
+
+        // Assert
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
+    }
+
+    public function test_get_predictions_for_day_11(): void
+    {
+        // Set data
+        $dayNumber = 11;
+        $dateRequested = new \DateTime();
+        $dateRequested->modify("+{$dayNumber} day");
+
+        $expectedResult = '';
+
+        // Do operations
+        $this->client->request('GET', '/api/weather/amsterdam?date=' . $dateRequested->format('Y-m-d'));
 
         // Assert
         $this->assertResponseStatusCodeSame(204);
