@@ -3,6 +3,7 @@
 namespace App\Tests\Integration;
 
 use App\DataFixtures\LocationFixtures;
+use App\DataFixtures\PartnerFixtures;
 use App\DataFixtures\PredictionFixtures;
 use App\Exception\InvalidDateException;
 use App\Service\MyWeatherService;
@@ -19,6 +20,7 @@ class PredictionsTest extends KernelTestCase
 
         $this->databaseTool->loadFixtures([
             LocationFixtures::class,
+            PartnerFixtures::class,
             PredictionFixtures::class,
         ]);
     }

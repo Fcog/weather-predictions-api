@@ -3,6 +3,7 @@
 namespace App\Tests\Application;
 
 use App\DataFixtures\LocationFixtures;
+use App\DataFixtures\PartnerFixtures;
 use App\DataFixtures\PredictionFixtures;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -20,6 +21,7 @@ class WeatherEndpointTest extends WebTestCase
 
         $this->databaseTool->loadFixtures([
             LocationFixtures::class,
+            PartnerFixtures::class,
             PredictionFixtures::class,
         ]);
     }
