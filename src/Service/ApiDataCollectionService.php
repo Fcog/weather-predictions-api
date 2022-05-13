@@ -15,7 +15,7 @@ class ApiDataCollectionService implements DataCollection
 
     public function collect()
     {
-        $partners = $this->partnerRepository->findAll();
+        $partners = $this->partnerRepository->getAll();
 
         foreach ($partners as $partner) {
             $partner->getApiUrl();

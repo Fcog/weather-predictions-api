@@ -14,9 +14,6 @@ class HumanReadableOutputFormatterService implements OutputFormatter
     {
     }
 
-    /**
-     * @throws NonExistentTempScaleException
-     */
     public function output(array $predictionsData, string $selectedTempScale): array
     {
         return array_map(function($prediction) use ($selectedTempScale) {

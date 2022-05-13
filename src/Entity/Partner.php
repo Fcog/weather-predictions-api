@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Enums\InputFormat;
 
-class Partner
+abstract class Partner
 {
     private int $id;
 
@@ -61,4 +61,8 @@ class Partner
 
         return $this;
     }
+
+    public abstract function decodeMetaData(): void;
+
+    public abstract function decodePredictions(): void;
 }

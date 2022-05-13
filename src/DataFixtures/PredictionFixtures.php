@@ -16,13 +16,13 @@ class PredictionFixtures extends Fixture
     {
         // --------- Partners ----------------
 
-        $partner = new Partner();
+        $partner = new Partner\BBC();
         $partner->setId(1);
         $partner->setName('BBC');
         $partner->setApiUrl('https://bbc.com/weather');
         $partner->setFormat(InputFormat::JSON);
 
-        $partner = new Partner();
+        $partner = new Partner\WeatherDotCom();
         $partner->setId(2);
         $partner->setName('weather.com');
         $partner->setApiUrl('https://weather.com/weather');
