@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Contract\DataCollection;
 use App\Contract\PartnerInterface;
 use App\Dto\PartnerMetadata;
+use App\Dto\PredictionData;
 use App\Entity\Location;
 use App\Entity\Prediction;
 use App\Exception\NonExistentTempScaleException;
@@ -96,7 +97,7 @@ class ApiDataCollectionService implements DataCollection
      * @throws NonExistentTempScaleException
      */
     private function setPrediction(
-        array $predictionData,
+        PredictionData $predictionData,
         PartnerMetadata $partnerMetadata,
         Location $location,
         PartnerInterface $partner
@@ -104,7 +105,7 @@ class ApiDataCollectionService implements DataCollection
     {
         $prediction = $this->predictionRepository->findBy([
             'partner_id' => $partner->getId(),
-            'time' => $predictionData['time'],
+            'time' => $predictionData->getTime(),
         ]);
 
         if (empty($prediction)) {
@@ -112,12 +113,12 @@ class ApiDataCollectionService implements DataCollection
             $prediction->setLocation($location);
             $prediction->setPartnerId($partner->getId());
             $prediction->setDate($partnerMetadata->getDate());
-            $prediction->setTime($predictionData['time']);
+            $prediction->setTime($predictionData->getTime());
         }
 
         $tempScale = $this->tempScaleFactory->create(
             $partnerMetadata->getTempScale(),
-            (int) $predictionData['value']
+            $predictionData->getTemp()
         );
         $prediction->setTemperature($tempScale);
 

@@ -3,6 +3,7 @@
 namespace App\Entity\Partner;
 
 use App\Dto\PartnerMetadata;
+use App\Dto\PredictionData;
 use App\Enums\InputFormat;
 use App\Exception\PartnerDataDecodeException;
 use App\ObjectValue\TempScale;
@@ -51,20 +52,37 @@ class BBC extends PartnerBase
             $metadata->setTempScale($decodedData['-scale']);
 
             return $metadata;
-        } catch (\Throwable) {
-            throw new PartnerDataDecodeException('JSON schema not synced correctly');
+        } catch (\Throwable $throwable) {
+            throw new PartnerDataDecodeException(
+                'JSON schema not synced correctly: ' . $throwable->getMessage()
+            );
         }
     }
 
     /**
      * @throws PartnerDataDecodeException
+     * @returns array<int, PredictionData>
      */
     public function decodePredictions(array $decodedData): array
     {
         try {
-            return $decodedData['predictions']['prediction'];
-        } catch (\Throwable) {
-            throw new PartnerDataDecodeException('JSON schema not synced correctly');
+            $data = [];
+            $decodedData = $decodedData['predictions'];
+
+            foreach ($decodedData['prediction'] as $prediction) {
+
+                $predictionData = new PredictionData();
+                $predictionData->setTime($prediction['time']);
+                $predictionData->setTemp($prediction['value']);
+
+                $data[] = $predictionData;
+            }
+
+            return $data;
+        } catch (\Throwable $throwable) {
+            throw new PartnerDataDecodeException(
+                'JSON schema not synced correctly: ' . $throwable->getMessage()
+            );
         }
     }
 }
