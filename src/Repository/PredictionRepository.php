@@ -51,7 +51,7 @@ class PredictionRepository extends ServiceEntityRepository
                 FROM App\Entity\Prediction p
                 JOIN p.location l
                 WHERE l.name = :city AND p.date = :date
-                GROUP BY p.partner_id, p.time'
+                GROUP BY p.time'
             )
             ->setParameter('city', $city)
             ->setParameter('date', $date);

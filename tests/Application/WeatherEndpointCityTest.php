@@ -33,8 +33,8 @@ class WeatherEndpointCityTest extends WebTestCase
         $data['title'] = "Weather predictions in Amsterdam on {$today->format('F d, Y')}";
 
         $data['predictions'] = [
-            "At 00:00 is 10 ºC",
-            "At 01:00 is 11 ºC",
+            "At 00:00 is 11 ºC",
+            "At 01:00 is 12 ºC",
         ];
 
         $expectedResult = json_encode(['data' => $data]);

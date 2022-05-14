@@ -15,9 +15,10 @@ class PredictionFixtures extends Fixture
         // --------- Today's predictions ----------------
 
         $today = new \DateTime();
-        $temp = Celsius::fromCelsius(10);
 
         $location = $manager->getRepository(Location::class)->findOneBy(['name' => 'Amsterdam']);
+
+        $temp = Celsius::fromCelsius(10);
 
         $prediction = new Prediction();
         $prediction->setDate($today);
@@ -27,7 +28,27 @@ class PredictionFixtures extends Fixture
         $prediction->setPartnerId(1);
         $manager->persist($prediction);
 
+        $temp = Celsius::fromCelsius(12);
+
+        $prediction = new Prediction();
+        $prediction->setDate($today);
+        $prediction->setTime('00:00');
+        $prediction->setTemperature($temp);
+        $prediction->setLocation($location);
+        $prediction->setPartnerId(2);
+        $manager->persist($prediction);
+
         $temp = Celsius::fromCelsius(11);
+
+        $prediction = new Prediction();
+        $prediction->setDate($today);
+        $prediction->setTime('01:00');
+        $prediction->setTemperature($temp);
+        $prediction->setLocation($location);
+        $prediction->setPartnerId(1);
+        $manager->persist($prediction);
+
+        $temp = Celsius::fromCelsius(14);
 
         $prediction = new Prediction();
         $prediction->setDate($today);

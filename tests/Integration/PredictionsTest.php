@@ -44,8 +44,8 @@ class PredictionsTest extends KernelTestCase
         $today = new \DateTime();
 
         $expectedResult = [
-            "At 00:00 is 10 ºC",
-            "At 01:00 is 11 ºC",
+            "At 00:00 is 11 ºC",
+            "At 01:00 is 12 ºC",
         ];
 
         // Do operations
@@ -62,8 +62,8 @@ class PredictionsTest extends KernelTestCase
         $today = new \DateTime();
 
         $expectedResult = [
-            "At 00:00 is 50 ºF",
-            "At 01:00 is 51 ºF",
+            "At 00:00 is 51 ºF",
+            "At 01:00 is 53 ºF",
         ];
 
         // Do operations
@@ -80,7 +80,7 @@ class PredictionsTest extends KernelTestCase
         $today = new \DateTime();
 
         $expectedResult = [
-            "At 00:00 is 12 ºRo",
+            "At 00:00 is 13 ºRo",
             "At 01:00 is 13 ºRo",
         ];
 
