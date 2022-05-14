@@ -14,13 +14,15 @@
 
 ## Endpoint
 
-https://localhost/api/weather/{city}?date={Y-m-d}
+https://localhost/api/weather/{city}?date={Y-m-d}&scale={scale}
 
 Examples:
 
 https://localhost/api/weather/amsterdam
 
 https://localhost/api/weather/amsterdam?date=2022-12-15
+
+https://localhost/api/weather/amsterdam?scale=fahrenheit
 
 ## Run Tests
 

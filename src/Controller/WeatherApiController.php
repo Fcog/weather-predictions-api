@@ -16,16 +16,14 @@ class WeatherApiController extends AbstractController
     public function index(Request $request, WeatherService $weatherService, string $city): Response
     {
         $city = ucfirst($city);
-        $date = $request->query->get('date');
+        $date = $request->query->get('date', '');
+        $scale = $request->query->get('scale', 'celsius');
 
         try {
-            if ($date) {
-                $date = new \DateTime($date);
 
-                $data = $weatherService->getWeather($city, $date);
-            } else {
-                $data = $weatherService->getWeather($city);
-            }
+            $date = new \DateTime($date);
+
+            $data = $weatherService->getWeather($city, $date, $scale);
 
             return $this->json([
                 'data' => $data,
