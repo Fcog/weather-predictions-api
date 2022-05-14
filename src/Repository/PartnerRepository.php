@@ -6,8 +6,11 @@ use App\Entity\Partner;
 
 class PartnerRepository
 {
-    public function __construct(private array $collection)
+    private array $collection;
+
+    public function __construct()
     {
+        $this->collection = [];
     }
 
     public function add(Partner $partner): void

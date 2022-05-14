@@ -3,38 +3,15 @@
 namespace App\DataFixtures;
 
 use App\Entity\Location;
-use App\Entity\Partner;
 use App\Entity\Prediction;
-use App\Enums\InputFormat;
 use App\ObjectValue\Celsius;
-use App\Service\PartnerFactoryService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 class PredictionFixtures extends Fixture
 {
-    public function __construct(
-        private PartnerFactoryService $partnerFactory
-    )
-    {
-    }
-
     public function load(ObjectManager $manager): void
     {
-        // --------- Partners ----------------
-        $this->partnerFactory->create(
-            1,
-            'bbc',
-            'https://bbc.com/weather',
-            InputFormat::JSON
-        );
-        $this->partnerFactory->create(
-            2,
-            'weather.com',
-            'https://weather.com/weather',
-            InputFormat::CSV
-        );
-
         // --------- Today's predictions ----------------
 
         $today = new \DateTime();

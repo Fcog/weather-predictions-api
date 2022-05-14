@@ -3,24 +3,30 @@
 namespace App\Entity\Partner;
 
 use App\Entity\Partner;
+use App\Enums\InputFormat;
+use JetBrains\PhpStorm\Pure;
 
 class BBC extends Partner
 {
-
-    public function decodeMetaData(array $data): array
+    #[Pure]
+    public function __construct()
     {
-        $encodedData = $this->fetchData();
+        $this->id = 1;
+        $this->name = 'bbc';
+        $this->api_url = 'https://bbc.com/weather';
+        $this->format = InputFormat::JSON;
+    }
 
+    public function decodeMetaData(array $encodedData): array
+    {
         // TODO deserialize into Partner object
         $decodedData = [];
 
         return $decodedData;
     }
 
-    public function decodePredictions(array $data): array
+    public function decodePredictions(array $encodedData): array
     {
-        $encodedData = $this->fetchData();
-
         // TODO deserialize into Partner object
         $decodedData = [];
 

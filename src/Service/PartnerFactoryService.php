@@ -6,15 +6,14 @@ use App\Contract\PartnerFactory;
 use App\Entity\Partner\BBC;
 use App\Entity\Partner;
 use App\Entity\Partner\WeatherDotCom;
-use App\Enums\InputFormat;
 use App\Exception\NonExistentPartnerException;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Repository\PartnerRepository;
 
 class PartnerFactoryService implements PartnerFactory
 {
 
     public function __construct(
-        private HttpClientInterface $client
+        private PartnerRepository $partnerRepository
     )
     {
     }
@@ -22,12 +21,16 @@ class PartnerFactoryService implements PartnerFactory
     /**
      * @throws NonExistentPartnerException
      */
-    public function create(int $id, string $name, string $apiUrl, InputFormat $format): Partner
+    public function create(string $name): Partner
     {
-        return match ($name) {
-            'bbc' => new BBC($this->client, $id, $name, $apiUrl, $format),
-            'weather.com' => new WeatherDotCom($this->client, $id, $name, $apiUrl, $format),
+        $partner = match ($name) {
+            'bbc' => new BBC(),
+            'weather.com' => new WeatherDotCom(),
             default => throw new NonExistentPartnerException(),
         };
+
+        $this->partnerRepository->add($partner);
+
+        return $partner;
     }
 }

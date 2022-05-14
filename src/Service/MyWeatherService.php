@@ -16,7 +16,7 @@ class MyWeatherService implements WeatherService
 
     public function __construct(
         private OutputFormatter $outputFormatter,
-        private ManagerRegistry $managerRegistry
+        private ManagerRegistry $managerRegistry,
     )
     {
     }
@@ -50,9 +50,9 @@ class MyWeatherService implements WeatherService
     {
         $cities = new LocationRepository($this->managerRegistry);
 
-        $cityFound = $cities->findOneBy(['name' => $city]);
+        $isCityFound = $cities->findOneBy(['name' => $city]);
 
-        if (!$cityFound) {
+        if (!$isCityFound) {
             throw new CityNotFoundException();
         }
     }

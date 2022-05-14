@@ -3,24 +3,30 @@
 namespace App\Entity\Partner;
 
 use App\Entity\Partner;
+use App\Enums\InputFormat;
+use JetBrains\PhpStorm\Pure;
 
 class WeatherDotCom extends Partner
 {
-
-    public function decodeMetaData(array $data): array
+    #[Pure]
+    public function __construct()
     {
-        $encodedData = $this->fetchData();
+        $this->id = 2;
+        $this->name = 'weather.com';
+        $this->api_url = 'https://weather.com/weather';
+        $this->format = InputFormat::CSV;
+    }
 
+    public function decodeMetaData(array $encodedData): array
+    {
         // TODO deserialize into Partner object
         $decodedData = [];
 
         return $decodedData;
     }
 
-    public function decodePredictions(array $data): array
+    public function decodePredictions(array $encodedData): array
     {
-        $encodedData = $this->fetchData();
-
         // TODO deserialize into Partner object
         $decodedData = [];
 

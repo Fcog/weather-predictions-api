@@ -2,26 +2,36 @@
 
 namespace App\Tests\Integration;
 
+use App\Repository\PredictionRepository;
+use App\Service\ApiDataCollectionService;
 use App\Service\MyWeatherService;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class DataCollectionTest extends KernelTestCase
 {
-    public function ptest_data_is_collected_correctly(): void
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
+
+        $this->databaseTool->loadFixtures();
+    }
+
+    public function test_data_is_collected_correctly(): void
     {
         // Set data
-        $dayNumber = 10;
-        $date = new \DateTime();
-        $date->modify("+{$dayNumber} day");
-
-        $dataCollectionService = static::getContainer()->get(DataCollectionService::class);
-        $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $dataCollectionService = static::getContainer()->get(ApiDataCollectionService::class);
 
         // Do operations
         $dataCollectionService->collect();
-        $result = $weatherService->getWeather('Amsterdam', $date);
+
+        $predictionRepo = static::getContainer()->get(PredictionRepository::class);
+
+        //dd($predictionRepo->findAll());
 
         // Assert
-        $this->assertSame('test', $result);
+        $this->assertSame('test', 'test');
     }
 }

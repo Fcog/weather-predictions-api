@@ -3,7 +3,6 @@
 namespace App\Tests\Integration;
 
 use App\DataFixtures\LocationFixtures;
-use App\DataFixtures\PartnerFixtures;
 use App\DataFixtures\PredictionFixtures;
 use App\Exception\InvalidDateException;
 use App\Service\MyWeatherService;
