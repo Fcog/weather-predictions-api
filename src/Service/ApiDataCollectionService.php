@@ -106,6 +106,7 @@ class ApiDataCollectionService implements DataCollection
         $prediction = $this->predictionRepository->findBy([
             'partner_id' => $partner->getId(),
             'time' => $predictionData->getTime(),
+            'date' => $partnerMetadata->getDate(),
         ]);
 
         if (empty($prediction)) {
