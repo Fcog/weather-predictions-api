@@ -4,16 +4,12 @@ namespace App\Service;
 
 use App\Contract\DataCollection;
 use App\Contract\PartnerInterface;
-use App\Dto\PartnerMetadata;
-use App\Dto\PredictionData;
-use App\Entity\Location;
-use App\Entity\Prediction;
+use App\Deserializer\LocationDeserializer;
+use App\Deserializer\PredictionDeserializer;
 use App\Exception\NonExistentTempScaleException;
 use App\Exception\PartnerApiDataFetchException;
 use App\Exception\PartnerDataDecodeException;
-use App\Repository\LocationRepository;
 use App\Repository\PartnerRepository;
-use App\Repository\PredictionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -21,11 +17,9 @@ class ApiDataCollectionService implements DataCollection
 {
     public function __construct(
         private PartnerRepository $partnerRepository,
-        private PredictionRepository $predictionRepository,
-        private LocationRepository $locationRepository,
-        private EntityManagerInterface $entityManager,
-        private TempScaleFactoryService $tempScaleFactory,
-        private HttpClientInterface $client
+        private HttpClientInterface $client,
+        private PredictionDeserializer $predictionDeserializer,
+        private LocationDeserializer $locationDeserializer,
     )
     {
     }
@@ -44,20 +38,13 @@ class ApiDataCollectionService implements DataCollection
             $decodedMetaData = $partner->decodeMetaData($decodedData);
             $decodedPredictionsData = $partner->decodePredictions($decodedData);
 
-            $location = $this->setCity($decodedMetaData->getCity());
-
-            foreach ($decodedPredictionsData as $predictionData) {
-                $prediction = $this->setPrediction(
-                    $predictionData,
-                    $decodedMetaData,
-                    $location,
-                    $partner
-                );
-
-                $this->entityManager->persist($prediction);
-            }
-
-            $this->entityManager->flush();
+            $location = $this->locationDeserializer->deserialize($decodedMetaData->getCity());
+            $this->predictionDeserializer->deserialize(
+                $decodedPredictionsData,
+                $decodedMetaData,
+                $location,
+                $partner
+            );
         }
     }
 
@@ -78,51 +65,5 @@ class ApiDataCollectionService implements DataCollection
     private function fetchDataMock(PartnerInterface $partner): string
     {
         return file_get_contents(__DIR__ . '/../../tests/data/temps.' . $partner->getFormat()->value);
-    }
-
-    private function setCity(string $city): Location
-    {
-        $location = $this->locationRepository->findOneBy(['name' => $city]);
-
-        if (empty($location)) {
-            $location = new Location();
-            $location->setName($city);
-            $this->entityManager->persist($location);
-        }
-
-        return $location;
-    }
-
-    /**
-     * @throws NonExistentTempScaleException
-     */
-    private function setPrediction(
-        PredictionData $predictionData,
-        PartnerMetadata $partnerMetadata,
-        Location $location,
-        PartnerInterface $partner
-    ): Prediction
-    {
-        $prediction = $this->predictionRepository->findBy([
-            'partner_id' => $partner->getId(),
-            'time' => $predictionData->getTime(),
-            'date' => $partnerMetadata->getDate(),
-        ]);
-
-        if (empty($prediction)) {
-            $prediction = new Prediction();
-            $prediction->setLocation($location);
-            $prediction->setPartnerId($partner->getId());
-            $prediction->setDate($partnerMetadata->getDate());
-            $prediction->setTime($predictionData->getTime());
-        }
-
-        $tempScale = $this->tempScaleFactory->create(
-            $partnerMetadata->getTempScale(),
-            $predictionData->getTemp()
-        );
-        $prediction->setTemperature($tempScale);
-
-        return $prediction;
     }
 }
