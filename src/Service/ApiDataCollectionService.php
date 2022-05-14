@@ -10,7 +10,6 @@ use App\Exception\NonExistentTempScaleException;
 use App\Exception\PartnerApiDataFetchException;
 use App\Exception\PartnerDataDecodeException;
 use App\Repository\PartnerRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ApiDataCollectionService implements DataCollection

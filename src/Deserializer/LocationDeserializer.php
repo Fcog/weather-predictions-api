@@ -15,6 +15,9 @@ class LocationDeserializer
     {
     }
 
+    /**
+     * TODO Use the serializer component
+     */
     public function deserialize(string $city): Location
     {
         $location = $this->locationRepository->findOneBy(['name' => $city]);

@@ -45,7 +45,7 @@ class WeatherDotCom extends PartnerBase
 
     public function decodePredictions(array $decodedData): array
     {
-        // TODO deserialize into Partner object
+        // TODO deserialize into Predictions object
         $decodedData = [];
 
         return $decodedData;

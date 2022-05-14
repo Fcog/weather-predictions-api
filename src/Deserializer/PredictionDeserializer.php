@@ -47,6 +47,8 @@ class PredictionDeserializer
     }
 
     /**
+     * TODO Use the serializer component
+     *
      * @throws NonExistentTempScaleException
      */
     private function setPrediction(
