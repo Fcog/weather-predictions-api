@@ -3,13 +3,12 @@
 namespace App\Service;
 
 use App\Contract\DataCollection;
+use App\Contract\PartnerInterface;
 use App\Entity\Location;
-use App\Entity\Partner;
 use App\Entity\Prediction;
 use App\Exception\PartnerApiDataFetchException;
 use App\ObjectValue\Celsius;
 use App\Repository\PartnerRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -31,12 +30,14 @@ class ApiDataCollectionService implements DataCollection
         $partners = $this->partnerRepository->getAll();
 
         foreach ($partners as $partner) {
-            $encodedData = $this->fetchData($partner);
+            $encodedData = $this->fetchDataMock($partner);
+            var_dump($encodedData);
             $decodedMetaData = $partner->decodeMetaData($encodedData);
             $decodedPredictionsData = $partner->decodePredictions($encodedData);
 
             $location = new Location();
             $location->setName('Amsterdam');
+            $this->entityManager->persist($location);
 
             $prediction = new Prediction();
             $prediction->setLocation($location);
@@ -52,7 +53,7 @@ class ApiDataCollectionService implements DataCollection
     /**
      * @throws PartnerApiDataFetchException
      */
-    public function fetchData(Partner $partner): array
+    private function fetchData(PartnerInterface $partner): array
     {
         try {
             $response = $this->client->request('GET', $partner->getApiUrl());
@@ -61,5 +62,10 @@ class ApiDataCollectionService implements DataCollection
         } catch (\Throwable) {
             throw new PartnerApiDataFetchException();
         }
+    }
+
+    private function fetchDataMock(PartnerInterface $partner): string
+    {
+        return file_get_contents(__DIR__ . '/../../tests/data/temps.' . $partner->getFormat()->value);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Tests\Integration;
 
 use App\Repository\PredictionRepository;
 use App\Service\ApiDataCollectionService;
-use App\Service\MyWeatherService;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

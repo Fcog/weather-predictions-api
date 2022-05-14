@@ -24,5 +24,3 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Service\ApiDataCollectionService:
         public: true
-    App\Service\PartnerFactoryService:
-        factory: ['App\Entity\Partner\BBC', 'App\Entity\Partner\WeatherDotCom']

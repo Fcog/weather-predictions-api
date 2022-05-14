@@ -3,30 +3,25 @@
 namespace App\Repository;
 
 use App\Entity\Partner;
+use App\Entity\Partner\BBC;
+use App\Entity\Partner\WeatherDotCom;
+use JetBrains\PhpStorm\Pure;
 
 class PartnerRepository
 {
     private array $collection;
 
+    #[Pure]
     public function __construct()
     {
-        $this->collection = [];
-    }
-
-    public function add(Partner $partner): void
-    {
-        $this->collection[] = $partner;
-    }
-
-    public function remove(Partner $partner): void
-    {
-        if (($key = array_search($partner, $this->collection)) !== false) {
-            unset($this->collection[$key]);
-        }
+        $this->collection = [
+            new BBC(),
+            new WeatherDotCom(),
+        ];
     }
 
     /**
-     * @return array<int, Partner>
+     * @return array<int, Partner\PartnerBase>
      */
     public function getAll(): array
     {
