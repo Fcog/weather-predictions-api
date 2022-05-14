@@ -47,13 +47,13 @@ class WeatherEndpointCityTest extends WebTestCase
     public function test_no_predictions_for_city_not_found(): void
     {
         // Set data
-        $expectedResult = '';
+        $expectedResult = json_encode(['error' => 'City not found']);
 
         // Do operations
         $this->client->request('GET', '/api/weather/cali');
 
         // Assert
-        $this->assertResponseStatusCodeSame(204);
+        $this->assertResponseStatusCodeSame(400);
         $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
     }
 }

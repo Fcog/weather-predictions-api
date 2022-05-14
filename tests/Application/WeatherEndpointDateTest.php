@@ -53,13 +53,13 @@ class WeatherEndpointDateTest extends WebTestCase
         $dateRequested = new \DateTime();
         $dateRequested->modify("+{$dayNumber} day");
 
-        $expectedResult = '';
+        $expectedResult = json_encode(['error' => 'Invalid date']);
 
         // Do operations
         $this->client->request('GET', '/api/weather/amsterdam?date=' . $dateRequested->format('Y-m-d'));
 
         // Assert
-        $this->assertResponseStatusCodeSame(204);
+        $this->assertResponseStatusCodeSame(400);
         $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
     }
 
@@ -69,13 +69,13 @@ class WeatherEndpointDateTest extends WebTestCase
         $dayNumber = 1;
         $dateRequested = new \DateTime('yesterday');
 
-        $expectedResult = '';
+        $expectedResult = json_encode(['error' => 'Invalid date']);
 
         // Do operations
         $this->client->request('GET', '/api/weather/amsterdam?date=' . $dateRequested->format('Y-m-d'));
 
         // Assert
-        $this->assertResponseStatusCodeSame(204);
+        $this->assertResponseStatusCodeSame(400);
         $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
     }
 }

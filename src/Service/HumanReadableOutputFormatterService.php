@@ -3,8 +3,7 @@
 namespace App\Service;
 
 use App\Contract\OutputFormatter;
-use App\Contract\TempScaleFactory;
-use App\Exception\NonExistentTempScaleException;
+use App\Exception\InvalidTempScaleException;
 
 class HumanReadableOutputFormatterService implements OutputFormatter
 {
@@ -15,7 +14,7 @@ class HumanReadableOutputFormatterService implements OutputFormatter
     }
 
     /**
-     * @throws NonExistentTempScaleException
+     * @throws InvalidTempScaleException
      */
     public function output(array $predictionsData, string $selectedTempScale): array
     {

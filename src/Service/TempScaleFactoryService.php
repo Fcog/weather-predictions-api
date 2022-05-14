@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Exception\NonExistentTempScaleException;
+use App\Exception\InvalidTempScaleException;
 use App\ObjectValue\Celsius;
 use App\ObjectValue\Fahrenheit;
 use App\ObjectValue\Romer;
@@ -11,7 +11,7 @@ use App\ObjectValue\TempScale;
 class TempScaleFactoryService
 {
     /**
-     * @throws NonExistentTempScaleException
+     * @throws InvalidTempScaleException
      */
     public function convert(string $selectedTempScale, TempScale $tempScale): TempScale
     {
@@ -19,12 +19,12 @@ class TempScaleFactoryService
             'fahrenheit' => Fahrenheit::fromCelsius($tempScale->getCelsius()),
             'celsius' => Celsius::fromCelsius($tempScale->getCelsius()),
             'romer' => Romer::fromCelsius($tempScale->getCelsius()),
-            default => throw new NonExistentTempScaleException(),
+            default => throw new InvalidTempScaleException(),
         };
     }
 
     /**
-     * @throws NonExistentTempScaleException
+     * @throws InvalidTempScaleException
      */
     public function create(string $selectedTempScale, int $temp): TempScale
     {
@@ -32,7 +32,7 @@ class TempScaleFactoryService
             'fahrenheit' => new Fahrenheit($temp),
             'celsius' => new Celsius($temp),
             'romer' => new Romer($temp),
-            default => throw new NonExistentTempScaleException(),
+            default => throw new InvalidTempScaleException(),
         };
     }
 }

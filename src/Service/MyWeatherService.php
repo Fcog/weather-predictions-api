@@ -6,6 +6,7 @@ use App\Contract\OutputFormatter;
 use App\Contract\WeatherService;
 use App\Exception\CityNotFoundException;
 use App\Exception\InvalidDateException;
+use App\Exception\InvalidTempScaleException;
 use App\Repository\LocationRepository;
 use App\Repository\PredictionRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,6 +25,7 @@ class MyWeatherService implements WeatherService
     /**
      * @throws CityNotFoundException
      * @throws InvalidDateException
+     * @throws InvalidTempScaleException
      */
     public function getWeather(
         string $cityRequested,

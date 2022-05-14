@@ -24,7 +24,7 @@ class WeatherEndpointScaleTest extends WebTestCase
         ]);
     }
 
-    public function test_get_predictions_for_celsius(): void
+    public function test_get_predictions_in_celsius(): void
     {
         // Set data
         $today = new \DateTime();
@@ -44,7 +44,7 @@ class WeatherEndpointScaleTest extends WebTestCase
         $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
     }
 
-    public function test_get_predictions_for_fahrenheit(): void
+    public function test_get_predictions_in_fahrenheit(): void
     {
         // Set data
         $today = new \DateTime();
@@ -61,6 +61,19 @@ class WeatherEndpointScaleTest extends WebTestCase
 
         // Assert
         $this->assertResponseStatusCodeSame(200);
+        $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
+    }
+
+    public function test_get_predictions_in_invalid_scale(): void
+    {
+        // Set data
+        $expectedResult = json_encode(['error' => 'Invalid temperature scale']);
+
+        // Do operations
+        $this->client->request('GET', '/api/weather/amsterdam?scale=meters');
+
+        // Assert
+        $this->assertResponseStatusCodeSame(400);
         $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
     }
 }

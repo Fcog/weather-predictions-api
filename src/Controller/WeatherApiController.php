@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Contract\WeatherService;
 use App\Exception\CityNotFoundException;
 use App\Exception\InvalidDateException;
+use App\Exception\InvalidTempScaleException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,9 +29,23 @@ class WeatherApiController extends AbstractController
             return $this->json([
                 'data' => $data,
             ]);
-        } catch (CityNotFoundException | InvalidDateException $e) {
-            return $this->json([], 204);
-        } catch (\Exception $exception) {
+        }
+        catch (CityNotFoundException) {
+            return $this->json([
+                'error' => 'City not found'
+            ], 400);
+        }
+        catch (InvalidDateException) {
+            return $this->json([
+                'error' => 'Invalid date'
+            ], 400);
+        }
+        catch (InvalidTempScaleException) {
+            return $this->json([
+                'error' => 'Invalid temperature scale'
+            ], 400);
+        }
+        catch (\Exception $exception) {
             return $this->json([
                 'error' => $exception->getMessage()
             ], 500);
