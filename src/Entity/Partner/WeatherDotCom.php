@@ -2,7 +2,9 @@
 
 namespace App\Entity\Partner;
 
+use App\Dto\PartnerMetadata;
 use App\Enums\InputFormat;
+use App\Exception\PartnerDataDecodeException;
 use JetBrains\PhpStorm\Pure;
 
 class WeatherDotCom extends PartnerBase
@@ -18,15 +20,30 @@ class WeatherDotCom extends PartnerBase
         );
     }
 
-    public function decodeMetaData(string $encodedData): array
+    /**
+     * @throws PartnerDataDecodeException
+     */
+    public function decode(string $encodedData): array
     {
-        // TODO deserialize into Partner object
-        $decodedData = [];
+        $decodedData = json_decode($encodedData, true);
+
+        if ($decodedData === null) {
+            throw new PartnerDataDecodeException('Bad JSON format');
+        }
 
         return $decodedData;
     }
 
-    public function decodePredictions(string $encodedData): array
+    public function decodeMetaData(array $decodedData): PartnerMetadata
+    {
+        // TODO deserialize into Partner object
+        $decodedData = [];
+        $metadata = new PartnerMetadata();
+
+        return $metadata;
+    }
+
+    public function decodePredictions(array $decodedData): array
     {
         // TODO deserialize into Partner object
         $decodedData = [];

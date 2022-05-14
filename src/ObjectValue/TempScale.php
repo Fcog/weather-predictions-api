@@ -2,10 +2,13 @@
 
 namespace App\ObjectValue;
 
+use JetBrains\PhpStorm\Pure;
+
 abstract class TempScale
 {
     public function __construct(
         protected int $value,
+        protected string $name,
         private string $symbol
     )
     {

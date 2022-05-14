@@ -7,9 +7,9 @@ use JetBrains\PhpStorm\Pure;
 class Celsius extends TempScale
 {
     #[Pure]
-    private function __construct(int $value)
+    public function __construct(int $value)
     {
-        parent::__construct($value, 'ºC');
+        parent::__construct($value, 'celsius','ºC');
     }
 
     public function getCelsius(): int
@@ -17,6 +17,7 @@ class Celsius extends TempScale
         return $this->value;
     }
 
+    #[Pure]
     public static function fromCelsius(int $celsius): self
     {
         return new self($celsius);

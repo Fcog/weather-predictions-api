@@ -16,7 +16,7 @@ class PartnerRepository
     {
         $this->collection = [
             new BBC(),
-            new WeatherDotCom(),
+            //new WeatherDotCom(),
         ];
     }
 

@@ -9,7 +9,7 @@ class Fahrenheit extends TempScale
     #[Pure]
     public function __construct(int $value)
     {
-        parent::__construct($value, 'ºF');
+        parent::__construct($value, 'fahrenheit', 'ºF');
     }
 
     public function getCelsius(): int

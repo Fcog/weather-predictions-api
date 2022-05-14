@@ -22,15 +22,16 @@ class DataCollectionTest extends KernelTestCase
     {
         // Set data
         $dataCollectionService = static::getContainer()->get(ApiDataCollectionService::class);
+        $predictionRepo = static::getContainer()->get(PredictionRepository::class);
 
         // Do operations
         $dataCollectionService->collect();
-
-        $predictionRepo = static::getContainer()->get(PredictionRepository::class);
-
-        //dd($predictionRepo->findAll());
+        $predictions = $predictionRepo->findAll();
 
         // Assert
-        $this->assertSame('test', 'test');
+        $this->assertSame('00:00', $predictions[0]->getTime());
+        $this->assertSame(31, $predictions[0]->getTemperature()->getValue());
+        $this->assertSame('02:00', $predictions[2]->getTime());
+        $this->assertSame(25, $predictions[2]->getTemperature()->getValue());
     }
 }

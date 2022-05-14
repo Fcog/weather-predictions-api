@@ -1,6 +1,5 @@
 # Weather API
 
-
 ## Getting Started
 
 1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/)
@@ -26,3 +25,16 @@ https://localhost/api/weather/amsterdam?date=2022-12-15
 
 1. Enter container `docker-compose exec php /bin/ash`
 2. Run `php bin/phpunit`
+
+
+# Assumptions
+
+- For simplicity, temperature doesn't support decimals
+- temperature is saved as Celsius in the DB
+- Each partner has its own response schema
+- On production, the ApiDataCollectionService would run periodically using a worker or cron
+- In Dev, the ApiDataCollectionService mocks the APIs with the source data files
+
+## UML Diagrams
+
+- [Class diagram Lucid link](https://lucid.app/lucidchart/fb258ee5-97f3-4407-b558-62fc603de8e2/edit?invitationId=inv_d1e4e58a-50f1-45e3-8da2-6346705cdad0)

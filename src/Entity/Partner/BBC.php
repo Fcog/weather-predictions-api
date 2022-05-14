@@ -2,7 +2,10 @@
 
 namespace App\Entity\Partner;
 
+use App\Dto\PartnerMetadata;
 use App\Enums\InputFormat;
+use App\Exception\PartnerDataDecodeException;
+use App\ObjectValue\TempScale;
 use JetBrains\PhpStorm\Pure;
 
 class BBC extends PartnerBase
@@ -18,19 +21,50 @@ class BBC extends PartnerBase
         );
     }
 
-    public function decodeMetaData(string $encodedData): array
+    /**
+     * @throws PartnerDataDecodeException
+     */
+    public function decode(string $encodedData): array
     {
-        // TODO deserialize into Partner object
-        $decodedData = [];
+        $decodedData = json_decode($encodedData, true);
+
+        if ($decodedData === null) {
+            throw new PartnerDataDecodeException('Bad JSON format');
+        }
 
         return $decodedData;
     }
 
-    public function decodePredictions(string $encodedData): array
+    /**
+     * @throws PartnerDataDecodeException
+     */
+    public function decodeMetaData(array $decodedData): PartnerMetadata
     {
-        // TODO deserialize into Partner object
-        $decodedData = [];
+        try {
+            $decodedData = $decodedData['predictions'];
 
-        return $decodedData;
+            $date = new \DateTimeImmutable();
+
+            $metadata = new PartnerMetadata();
+            $metadata->setDate($date->createFromFormat('Ymd', $decodedData['date']));
+            $metadata->setCity($decodedData['city']);
+            $metadata->setTempScale($decodedData['-scale']);
+
+            return $metadata;
+        } catch (\Throwable) {
+            throw new PartnerDataDecodeException('JSON schema not synced correctly');
+        }
+    }
+
+    /**
+     * @throws PartnerDataDecodeException
+     */
+    public function decodePredictions(array $decodedData): array
+    {
+        try {
+            return $decodedData['predictions']['prediction'];
+        } catch (\Throwable) {
+            throw new PartnerDataDecodeException('JSON schema not synced correctly');
+        }
     }
 }

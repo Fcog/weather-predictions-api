@@ -7,9 +7,9 @@ use JetBrains\PhpStorm\Pure;
 class Romer extends TempScale
 {
     #[Pure]
-    private function __construct(int $value)
+    public function __construct(int $value)
     {
-        parent::__construct($value, 'ºRo');
+        parent::__construct($value, 'romer','ºRo');
     }
 
     public function getCelsius(): int

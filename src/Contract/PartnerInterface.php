@@ -2,7 +2,9 @@
 
 namespace App\Contract;
 
+use App\Dto\PartnerMetadata;
 use App\Enums\InputFormat;
+use App\Exception\PartnerDataDecodeException;
 
 interface PartnerInterface
 {
@@ -14,7 +16,18 @@ interface PartnerInterface
 
     public function getApiUrl(): ?string;
 
-    public function decodeMetaData(string $encodedData): array;
+    /**
+     * @throws PartnerDataDecodeException
+     */
+    public function decode(string $encodedData): array;
 
-    public function decodePredictions(string $encodedData): array;
+    /**
+     * @throws PartnerDataDecodeException
+     */
+    public function decodeMetaData(array $decodedData): PartnerMetadata;
+
+    /**
+     * @throws PartnerDataDecodeException
+     */
+    public function decodePredictions(array $decodedData): array;
 }
