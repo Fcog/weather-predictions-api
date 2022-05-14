@@ -4,10 +4,12 @@ namespace App\Service;
 
 use App\Contract\DataCollection;
 use App\Contract\PartnerInterface;
+use App\Dto\PartnerMetadata;
 use App\Entity\Location;
 use App\Entity\Prediction;
 use App\Exception\PartnerApiDataFetchException;
 use App\Exception\PartnerDataDecodeException;
+use App\Repository\LocationRepository;
 use App\Repository\PartnerRepository;
 use App\Repository\PredictionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,6 +20,7 @@ class ApiDataCollectionService implements DataCollection
     public function __construct(
         private PartnerRepository $partnerRepository,
         private PredictionRepository $predictionRepository,
+        private LocationRepository $locationRepository,
         private EntityManagerInterface $entityManager,
         private TempScaleFactoryService $tempScaleFactory,
         private HttpClientInterface $client
@@ -39,27 +42,18 @@ class ApiDataCollectionService implements DataCollection
 
             $decodedPredictionsData = $partner->decodePredictions($decodedData);
 
-            $location = new Location();
-            $location->setName($decodedMetaData->getCity());
+            $location = $this->setCity($decodedMetaData->getCity());
+
             $this->entityManager->persist($location);
 
             foreach ($decodedPredictionsData as $predictionData) {
-                $prediction = $this->predictionRepository->findBy([
-                    'partner_id' => $partner->getId(),
-                    'time' => $predictionData['time'],
-                ]);
+                $prediction = $this->setPrediction(
+                    $predictionData,
+                    $decodedMetaData,
+                    $location,
+                    $partner
+                );
 
-                if (empty($prediction)) {
-                    $prediction = new Prediction();
-                }
-
-                $tempScale = $this->tempScaleFactory->create($decodedMetaData->getTempScale(), (int) $predictionData['value']);
-
-                $prediction->setLocation($location);
-                $prediction->setPartnerId($partner->getId());
-                $prediction->setDate($decodedMetaData->getDate());
-                $prediction->setTime($predictionData['time']);
-                $prediction->setTemperature($tempScale);
                 $this->entityManager->persist($prediction);
             }
 
@@ -84,5 +78,48 @@ class ApiDataCollectionService implements DataCollection
     private function fetchDataMock(PartnerInterface $partner): string
     {
         return file_get_contents(__DIR__ . '/../../tests/data/temps.' . $partner->getFormat()->value);
+    }
+
+    private function setCity(string $city): Location
+    {
+        $location = $this->locationRepository->findBy(['name' => $city]);
+
+        if (empty($location)) {
+            $location = new Location();
+        }
+
+        $location->setName($city);
+
+        return $location;
+    }
+
+    private function setPrediction(
+        array $predictionData,
+        PartnerMetadata $partnerMetadata,
+        Location $location,
+        PartnerInterface $partner
+    ): Prediction
+    {
+        $prediction = $this->predictionRepository->findBy([
+            'partner_id' => $partner->getId(),
+            'time' => $predictionData['time'],
+        ]);
+
+        if (empty($prediction)) {
+            $prediction = new Prediction();
+        }
+
+        $tempScale = $this->tempScaleFactory->create(
+            $partnerMetadata->getTempScale(),
+            (int) $predictionData['value']
+        );
+
+        $prediction->setLocation($location);
+        $prediction->setPartnerId($partner->getId());
+        $prediction->setDate($partnerMetadata->getDate());
+        $prediction->setTime($predictionData['time']);
+        $prediction->setTemperature($tempScale);
+
+        return $prediction;
     }
 }
