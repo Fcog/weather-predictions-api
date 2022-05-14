@@ -16,12 +16,25 @@ class HumanReadableOutputFormatterService implements OutputFormatter
     /**
      * @throws InvalidTempScaleException
      */
-    public function output(array $predictionsData, string $selectedTempScale): array
+    public function output(
+        array $predictionsData,
+        string $selectedTempScale,
+        string $city,
+        \DateTimeInterface $date
+    ): array
     {
-        return array_map( function($prediction) use ($selectedTempScale) {
-            $temp = $this->tempScaleFactory->convert($selectedTempScale, $prediction->getTemperature());
+        $output = [];
 
-            return "The weather in {$prediction->getLocation()->getName()} on {$prediction->getDate()?->format('F d, Y')} at {$prediction->getTime()} is {$temp->getValue()} {$temp->getSymbol()}";
+        $output['title'] = "Weather predictions in {$city} on {$date->format('F d, Y')}";
+
+        $predictions = array_map( function($prediction) use ($selectedTempScale) {
+            $temp = $this->tempScaleFactory->createFromCelsius($selectedTempScale, (int) $prediction['avg_temp']);
+
+            return "At {$prediction['time']} is {$temp->getValue()} {$temp->getSymbol()}";
         }, $predictionsData);
+
+        $output['predictions'] = $predictions;
+
+        return $output;
     }
 }

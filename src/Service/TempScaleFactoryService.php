@@ -35,4 +35,17 @@ class TempScaleFactoryService
             default => throw new InvalidTempScaleException(),
         };
     }
+
+    /**
+     * @throws InvalidTempScaleException
+     */
+    public function createFromCelsius(string $selectedTempScale, int $celsius): TempScale
+    {
+        return match ($selectedTempScale) {
+            'fahrenheit' => Fahrenheit::fromCelsius($celsius),
+            'celsius' => Celsius::fromCelsius($celsius),
+            'romer' => Romer::fromCelsius($celsius),
+            default => throw new InvalidTempScaleException(),
+        };
+    }
 }

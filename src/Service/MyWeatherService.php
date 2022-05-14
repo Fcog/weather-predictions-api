@@ -41,7 +41,9 @@ class MyWeatherService implements WeatherService
 
         return $this->outputFormatter->output(
             $predictions->findByCity($cityRequested, $dateRequested),
-            $tempScaleRequested
+            $tempScaleRequested,
+            $cityRequested,
+            $dateRequested
         );
     }
 

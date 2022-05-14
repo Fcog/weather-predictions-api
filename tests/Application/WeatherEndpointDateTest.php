@@ -31,9 +31,13 @@ class WeatherEndpointDateTest extends WebTestCase
         $dateRequested = new \DateTime();
         $dateRequested->modify("+{$dayNumber} day");
 
-        $data = [
-            "The weather in Amsterdam on {$dateRequested->format('F d, Y')} at 11:00 is 5 ºC",
-            "The weather in Amsterdam on {$dateRequested->format('F d, Y')} at 12:00 is 3 ºC",
+        $data = [];
+
+        $data['title'] = "Weather predictions in Amsterdam on {$dateRequested->format('F d, Y')}";
+
+        $data['predictions'] = [
+            "At 11:00 is 5 ºC",
+            "At 12:00 is 3 ºC",
         ];
 
         $expectedResult = json_encode(['data' => $data]);

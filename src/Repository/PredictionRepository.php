@@ -44,15 +44,18 @@ class PredictionRepository extends ServiceEntityRepository
      */
     public function findByCity(string $city, \DateTimeInterface $date): array
     {
-        return $this->createQueryBuilder('p')
-            ->join('p.location', 'l')
-            ->andWhere('l.name = :city')
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+                'SELECT avg(p.temperature) as avg_temp, p.time
+                FROM App\Entity\Prediction p
+                JOIN p.location l
+                WHERE l.name = :city AND p.date = :date
+                GROUP BY p.partner_id, p.time'
+            )
             ->setParameter('city', $city)
-            ->andWhere('p.date = :date')
-            ->setParameter('date', $date)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
+            ->setParameter('date', $date);
+
+        return $query->getResult();
     }
 }

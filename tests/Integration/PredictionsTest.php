@@ -23,21 +23,37 @@ class PredictionsTest extends KernelTestCase
         ]);
     }
 
+    public function test_predictions_title(): void
+    {
+        // Set data
+        $today = new \DateTime();
+
+        $expectedResult = "Weather predictions in Amsterdam on {$today->format('F d, Y')}";
+
+        // Do operations
+        $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $result = $weatherService->getWeather('Amsterdam');
+
+        // Assert
+        $this->assertSame($expectedResult, $result['title']);
+    }
+
     public function test_get_predictions_for_today(): void
     {
         // Set data
         $today = new \DateTime();
 
         $expectedResult = [
-            "The weather in Amsterdam on {$today->format('F d, Y')} at 00:00 is 10 ºC",
-            "The weather in Amsterdam on {$today->format('F d, Y')} at 01:00 is 11 ºC",
+            "At 00:00 is 10 ºC",
+            "At 01:00 is 11 ºC",
         ];
 
         // Do operations
         $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $result = $weatherService->getWeather('Amsterdam');
 
         // Assert
-        $this->assertSame($expectedResult, $weatherService->getWeather('Amsterdam'));
+        $this->assertSame($expectedResult, $result['predictions']);
     }
 
     public function test_get_predictions_for_today_in_fahrenheit(): void
@@ -46,8 +62,8 @@ class PredictionsTest extends KernelTestCase
         $today = new \DateTime();
 
         $expectedResult = [
-            "The weather in Amsterdam on {$today->format('F d, Y')} at 00:00 is 50 ºF",
-            "The weather in Amsterdam on {$today->format('F d, Y')} at 01:00 is 51 ºF",
+            "At 00:00 is 50 ºF",
+            "At 01:00 is 51 ºF",
         ];
 
         // Do operations
@@ -55,7 +71,7 @@ class PredictionsTest extends KernelTestCase
         $result = $weatherService->getWeather('Amsterdam', $today, 'fahrenheit');
 
         // Assert
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame($expectedResult, $result['predictions']);
     }
 
     public function test_get_predictions_for_today_in_romer(): void
@@ -64,8 +80,8 @@ class PredictionsTest extends KernelTestCase
         $today = new \DateTime();
 
         $expectedResult = [
-            "The weather in Amsterdam on {$today->format('F d, Y')} at 00:00 is 12 ºRo",
-            "The weather in Amsterdam on {$today->format('F d, Y')} at 01:00 is 13 ºRo",
+            "At 00:00 is 12 ºRo",
+            "At 01:00 is 13 ºRo",
         ];
 
         // Do operations
@@ -73,7 +89,7 @@ class PredictionsTest extends KernelTestCase
         $result = $weatherService->getWeather('Amsterdam', $today, 'romer');
 
         // Assert
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame($expectedResult, $result['predictions']);
     }
 
     public function test_get_predictions_for_day_10(): void
@@ -84,8 +100,8 @@ class PredictionsTest extends KernelTestCase
         $date->modify("+{$dayNumber} day");
 
         $expectedResult = [
-            "The weather in Amsterdam on {$date->format('F d, Y')} at 11:00 is 5 ºC",
-            "The weather in Amsterdam on {$date->format('F d, Y')} at 12:00 is 3 ºC",
+            "At 11:00 is 5 ºC",
+            "At 12:00 is 3 ºC",
         ];
 
         // Do operations
@@ -93,7 +109,7 @@ class PredictionsTest extends KernelTestCase
         $result = $weatherService->getWeather('Amsterdam', $date);
 
         // Assert
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame($expectedResult, $result['predictions']);
     }
 
     public function test_get_predictions_for_day_11(): void

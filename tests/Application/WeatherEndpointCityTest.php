@@ -28,20 +28,24 @@ class WeatherEndpointCityTest extends WebTestCase
     {
         // Set data
         $today = new \DateTime();
+        $data = [];
 
-        $data = [
-            "The weather in Amsterdam on {$today->format('F d, Y')} at 00:00 is 10 ºC",
-            "The weather in Amsterdam on {$today->format('F d, Y')} at 01:00 is 11 ºC",
+        $data['title'] = "Weather predictions in Amsterdam on {$today->format('F d, Y')}";
+
+        $data['predictions'] = [
+            "At 00:00 is 10 ºC",
+            "At 01:00 is 11 ºC",
         ];
 
         $expectedResult = json_encode(['data' => $data]);
 
         // Do operations
         $this->client->request('GET', '/api/weather/amsterdam');
+        $result = $this->client->getResponse()->getContent();
 
         // Assert
         $this->assertResponseStatusCodeSame(200);
-        $this->assertEquals($expectedResult, $this->client->getResponse()->getContent());
+        $this->assertEquals($expectedResult, $result);
     }
 
     public function test_no_predictions_for_city_not_found(): void

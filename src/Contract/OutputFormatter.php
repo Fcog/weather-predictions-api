@@ -13,6 +13,8 @@ interface OutputFormatter
      */
     public function output(
         array $predictionsData,
-        string $selectedTempScale
+        string $selectedTempScale,
+        string $city,
+        \DateTimeInterface $date
     ): array;
 }

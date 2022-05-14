@@ -7,7 +7,7 @@ use App\Dto\PartnerMetadata;
 use App\Dto\PredictionData;
 use App\Entity\Location;
 use App\Entity\Prediction;
-use App\Exception\NonExistentTempScaleException;
+use App\Exception\InvalidTempScaleException;
 use App\Repository\PredictionRepository;
 use App\Service\TempScaleFactoryService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +23,7 @@ class PredictionDeserializer
     }
 
     /**
-     * @throws NonExistentTempScaleException
+     * @throws InvalidTempScaleException
      */
     public function deserialize(
         array $decodedPredictionsData,
@@ -49,7 +49,7 @@ class PredictionDeserializer
     /**
      * TODO Use the serializer component
      *
-     * @throws NonExistentTempScaleException
+     * @throws InvalidTempScaleException
      */
     private function setPrediction(
         PredictionData $predictionData,
