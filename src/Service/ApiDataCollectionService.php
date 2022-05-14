@@ -7,6 +7,7 @@ use App\Contract\PartnerInterface;
 use App\Dto\PartnerMetadata;
 use App\Entity\Location;
 use App\Entity\Prediction;
+use App\Exception\NonExistentTempScaleException;
 use App\Exception\PartnerApiDataFetchException;
 use App\Exception\PartnerDataDecodeException;
 use App\Repository\LocationRepository;
@@ -29,7 +30,8 @@ class ApiDataCollectionService implements DataCollection
     }
 
     /**
-     * @throws PartnerApiDataFetchException|PartnerDataDecodeException
+     * @throws PartnerDataDecodeException
+     * @throws NonExistentTempScaleException
      */
     public function collect()
     {
@@ -39,12 +41,9 @@ class ApiDataCollectionService implements DataCollection
             $encodedData = $this->fetchDataMock($partner);
             $decodedData = $partner->decode($encodedData);
             $decodedMetaData = $partner->decodeMetaData($decodedData);
-
             $decodedPredictionsData = $partner->decodePredictions($decodedData);
 
             $location = $this->setCity($decodedMetaData->getCity());
-
-            $this->entityManager->persist($location);
 
             foreach ($decodedPredictionsData as $predictionData) {
                 $prediction = $this->setPrediction(
@@ -82,17 +81,20 @@ class ApiDataCollectionService implements DataCollection
 
     private function setCity(string $city): Location
     {
-        $location = $this->locationRepository->findBy(['name' => $city]);
+        $location = $this->locationRepository->findOneBy(['name' => $city]);
 
         if (empty($location)) {
             $location = new Location();
+            $location->setName($city);
+            $this->entityManager->persist($location);
         }
-
-        $location->setName($city);
 
         return $location;
     }
 
+    /**
+     * @throws NonExistentTempScaleException
+     */
     private function setPrediction(
         array $predictionData,
         PartnerMetadata $partnerMetadata,
@@ -107,17 +109,16 @@ class ApiDataCollectionService implements DataCollection
 
         if (empty($prediction)) {
             $prediction = new Prediction();
+            $prediction->setLocation($location);
+            $prediction->setPartnerId($partner->getId());
+            $prediction->setDate($partnerMetadata->getDate());
+            $prediction->setTime($predictionData['time']);
         }
 
         $tempScale = $this->tempScaleFactory->create(
             $partnerMetadata->getTempScale(),
             (int) $predictionData['value']
         );
-
-        $prediction->setLocation($location);
-        $prediction->setPartnerId($partner->getId());
-        $prediction->setDate($partnerMetadata->getDate());
-        $prediction->setTime($predictionData['time']);
         $prediction->setTemperature($tempScale);
 
         return $prediction;

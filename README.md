@@ -7,8 +7,9 @@
 3. Run `docker-compose up` (the logs will be displayed in the current shell)
 4. Enter container `docker-compose exec php /bin/ash`
 5. Run `composer install`
-6. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-7. Run `docker-compose down --remove-orphans` to stop the Docker containers.
+6. Run `php bin/console app:collect-data` to get the API mock data in the DB
+7. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
+8. Run `docker-compose down --remove-orphans` to stop the Docker containers.
 
 
 ## Endpoint
