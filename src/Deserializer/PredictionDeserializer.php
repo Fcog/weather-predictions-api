@@ -2,10 +2,10 @@
 
 namespace App\Deserializer;
 
-use App\Contract\PartnerInterface;
 use App\Dto\PartnerMetadata;
 use App\Dto\PredictionData;
 use App\Entity\Location;
+use App\Entity\Partner\PartnerBase;
 use App\Entity\Prediction;
 use App\Exception\InvalidTempScaleException;
 use App\Repository\PredictionRepository;
@@ -29,7 +29,7 @@ class PredictionDeserializer
         array $decodedPredictionsData,
         PartnerMetadata $decodedMetaData,
         Location $location,
-        PartnerInterface $partner
+        PartnerBase $partner
     )
     {
         foreach ($decodedPredictionsData as $predictionData) {
@@ -55,7 +55,7 @@ class PredictionDeserializer
         PredictionData $predictionData,
         PartnerMetadata $partnerMetadata,
         Location $location,
-        PartnerInterface $partner
+        PartnerBase $partner
     ): Prediction
     {
         $prediction = $this->predictionRepository->findBy([

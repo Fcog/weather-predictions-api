@@ -3,10 +3,10 @@
 namespace App\Service;
 
 use App\Contract\DataCollection;
-use App\Contract\PartnerInterface;
 use App\Deserializer\LocationDeserializer;
 use App\Deserializer\PredictionDeserializer;
-use App\Exception\NonExistentTempScaleException;
+use App\Entity\Partner\PartnerBase;
+use App\Exception\InvalidTempScaleException;
 use App\Exception\PartnerApiDataFetchException;
 use App\Exception\PartnerDataDecodeException;
 use App\Repository\PartnerRepository;
@@ -25,9 +25,9 @@ class ApiDataCollectionService implements DataCollection
 
     /**
      * @throws PartnerDataDecodeException
-     * @throws NonExistentTempScaleException
+     * @throws InvalidTempScaleException
      */
-    public function collect()
+    public function collect(): void
     {
         $partners = $this->partnerRepository->getAll();
 
@@ -50,7 +50,7 @@ class ApiDataCollectionService implements DataCollection
     /**
      * @throws PartnerApiDataFetchException
      */
-    private function fetchData(PartnerInterface $partner): array
+    private function fetchData(PartnerBase $partner): array
     {
         try {
             $response = $this->client->request('GET', $partner->getApiUrl());
@@ -61,7 +61,7 @@ class ApiDataCollectionService implements DataCollection
         }
     }
 
-    private function fetchDataMock(PartnerInterface $partner): string
+    private function fetchDataMock(PartnerBase $partner): string
     {
         return file_get_contents(__DIR__ . '/../../tests/data/temps.' . $partner->getFormat()->value);
     }

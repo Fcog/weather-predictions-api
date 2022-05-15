@@ -2,10 +2,10 @@
 
 namespace App\Entity\Partner;
 
-use App\Contract\PartnerInterface;
+use App\Contract\PartnerDecoderInterface;
 use App\Enums\InputFormat;
 
-abstract class PartnerBase implements PartnerInterface
+abstract class PartnerBase implements PartnerDecoderInterface
 {
     public function __construct(
         protected int $id,
