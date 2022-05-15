@@ -7,7 +7,7 @@ use App\Service\ApiDataCollectionService;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class DataCollectionTest extends KernelTestCase
+class ApiDataCollectionTest extends KernelTestCase
 {
     public function setUp(): void
     {

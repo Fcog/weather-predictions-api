@@ -1,25 +1,25 @@
 <?php
 
-namespace App\ObjectValue;
+namespace App\TempScale;
 
 use JetBrains\PhpStorm\Pure;
 
-class Celsius extends TempScale
+class Fahrenheit extends TempScale
 {
     #[Pure]
     public function __construct(int $value)
     {
-        parent::__construct($value, 'celsius','ºC');
+        parent::__construct($value, 'fahrenheit', 'ºF');
     }
 
     public function getCelsius(): int
     {
-        return $this->value;
+        return floor(($this->value - 32) * 5 / 9);
     }
 
     #[Pure]
     public static function fromCelsius(int $celsius): self
     {
-        return new self($celsius);
+        return new self(floor(($celsius * 9 / 5) + 32));
     }
 }

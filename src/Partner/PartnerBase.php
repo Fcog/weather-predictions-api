@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Partner;
+namespace App\Partner;
 
 use App\Contract\PartnerDecoderInterface;
 use App\Enums\InputFormat;

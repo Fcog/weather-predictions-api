@@ -2,17 +2,21 @@
 
 namespace App\Deserializer;
 
+use App\Contract\InputFormatter;
 use App\Dto\PartnerMetadata;
 use App\Dto\PredictionData;
 use App\Entity\Location;
-use App\Entity\Partner\PartnerBase;
+use App\Partner\PartnerBase;
 use App\Entity\Prediction;
 use App\Exception\InvalidTempScaleException;
 use App\Repository\PredictionRepository;
 use App\Service\TempScaleFactoryService;
 use Doctrine\ORM\EntityManagerInterface;
 
-class PredictionDeserializer
+/**
+ * If Symfony's deserializer is used this Class won't be needed.
+ */
+class PredictionDeserializer implements InputFormatter
 {
     public function __construct(
         private EntityManagerInterface $entityManager,

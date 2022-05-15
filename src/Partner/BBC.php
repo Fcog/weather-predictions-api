@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Entity\Partner;
+namespace App\Partner;
 
 use App\Dto\PartnerMetadata;
 use App\Dto\PredictionData;
 use App\Enums\InputFormat;
 use App\Exception\PartnerDataDecodeException;
-use App\ObjectValue\TempScale;
 use JetBrains\PhpStorm\Pure;
 
 class BBC extends PartnerBase
@@ -39,7 +38,7 @@ class BBC extends PartnerBase
     /**
      * @throws PartnerDataDecodeException
      */
-    public function decodeMetaData(array $decodedData): PartnerMetadata
+    public function denormalizeMetaData(array $decodedData): PartnerMetadata
     {
         try {
             $decodedData = $decodedData['predictions'];
@@ -63,7 +62,7 @@ class BBC extends PartnerBase
      * @throws PartnerDataDecodeException
      * @returns array<int, PredictionData>
      */
-    public function decodePredictions(array $decodedData): array
+    public function denormalizePredictions(array $decodedData): array
     {
         try {
             $data = [];

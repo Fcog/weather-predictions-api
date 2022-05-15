@@ -19,7 +19,7 @@ class CollectData extends Command
     protected static $defaultName = 'app:collect-data';
 
     public function __construct(
-        private ApiDataCollectionService $apiDataCollectionService
+        private ApiDataCollectionService $apiDataCollectionService,
     )
     {
         parent::__construct();
@@ -28,10 +28,14 @@ class CollectData extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
+            // TODO Refactor to accept multiple types of data collection.
             $this->apiDataCollectionService->collect();
+
+            $output->writeln('Data collected');
 
             return Command::SUCCESS;
         } catch (\Throwable) {
+            $output->writeln('Error collecting data');
             return Command::FAILURE;
         }
     }

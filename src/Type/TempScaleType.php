@@ -2,7 +2,7 @@
 
 namespace App\Type;
 
-use App\ObjectValue\Celsius;
+use App\TempScale\Celsius;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 

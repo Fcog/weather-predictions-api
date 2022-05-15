@@ -34,7 +34,7 @@ https://localhost/api/weather/amsterdam?scale=fahrenheit
 
 - For simplicity, temperature doesn't support decimals
 - temperature is saved as Celsius in the DB
-- Each partner has its own response schema
+- Each partner has its own response schema which needs a different decoding
 - On production, the ApiDataCollectionService would run periodically using a worker or cron
 - In Dev, the ApiDataCollectionService mocks the APIs with the source data files
 

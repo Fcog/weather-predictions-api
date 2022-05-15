@@ -17,11 +17,11 @@ interface PartnerDecoderInterface
      * @throws PartnerDataDecodeException
      * @returns array<int, PartnerMetadata>
      */
-    public function decodeMetaData(array $decodedData): PartnerMetadata;
+    public function denormalizeMetaData(array $decodedData): PartnerMetadata;
 
     /**
      * @throws PartnerDataDecodeException
      * @returns array<int, PredictionData>
      */
-    public function decodePredictions(array $decodedData): array;
+    public function denormalizePredictions(array $decodedData): array;
 }

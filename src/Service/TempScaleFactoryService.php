@@ -3,10 +3,10 @@
 namespace App\Service;
 
 use App\Exception\InvalidTempScaleException;
-use App\ObjectValue\Celsius;
-use App\ObjectValue\Fahrenheit;
-use App\ObjectValue\Romer;
-use App\ObjectValue\TempScale;
+use App\TempScale\Celsius;
+use App\TempScale\Fahrenheit;
+use App\TempScale\Romer;
+use App\TempScale\TempScale;
 
 class TempScaleFactoryService
 {

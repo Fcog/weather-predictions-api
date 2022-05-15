@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\ObjectValue\TempScale;
+use App\TempScale\TempScale;
 use App\Repository\PredictionRepository;
 use Doctrine\ORM\Mapping as ORM;
 

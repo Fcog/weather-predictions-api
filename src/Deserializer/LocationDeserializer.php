@@ -6,6 +6,9 @@ use App\Entity\Location;
 use App\Repository\LocationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * If Symfony's deserializer is used this Class won't be needed.
+ */
 class LocationDeserializer
 {
     public function __construct(

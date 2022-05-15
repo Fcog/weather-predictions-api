@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ObjectValue;
+namespace App\TempScale;
 
 abstract class TempScale
 {

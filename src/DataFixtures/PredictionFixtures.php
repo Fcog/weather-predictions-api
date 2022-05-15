@@ -4,7 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Location;
 use App\Entity\Prediction;
-use App\ObjectValue\Celsius;
+use App\TempScale\Celsius;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 

@@ -2,7 +2,7 @@
 
 namespace App\Tests\Unit;
 
-use App\ObjectValue\Fahrenheit;
+use App\TempScale\Fahrenheit;
 use PHPUnit\Framework\TestCase;
 
 class FahrenheitTest extends TestCase

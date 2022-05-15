@@ -5,20 +5,22 @@ namespace App\Service;
 use App\Contract\DataCollection;
 use App\Deserializer\LocationDeserializer;
 use App\Deserializer\PredictionDeserializer;
-use App\Entity\Partner\PartnerBase;
+use App\Partner\PartnerBase;
 use App\Exception\InvalidTempScaleException;
 use App\Exception\PartnerApiDataFetchException;
 use App\Exception\PartnerDataDecodeException;
-use App\Repository\PartnerRepository;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ApiDataCollectionService implements DataCollection
 {
+    /**
+     * @param iterable<PartnerBase> $partners
+     */
     public function __construct(
-        private PartnerRepository $partnerRepository,
         private HttpClientInterface $client,
         private PredictionDeserializer $predictionDeserializer,
         private LocationDeserializer $locationDeserializer,
+        private iterable $partners
     )
     {
     }
@@ -29,13 +31,11 @@ class ApiDataCollectionService implements DataCollection
      */
     public function collect(): void
     {
-        $partners = $this->partnerRepository->getAll();
-
-        foreach ($partners as $partner) {
+        foreach ($this->partners as $partner) {
             $encodedData = $this->fetchDataMock($partner);
             $decodedData = $partner->decode($encodedData);
-            $decodedMetaData = $partner->decodeMetaData($decodedData);
-            $decodedPredictionsData = $partner->decodePredictions($decodedData);
+            $decodedMetaData = $partner->denormalizeMetaData($decodedData);
+            $decodedPredictionsData = $partner->denormalizePredictions($decodedData);
 
             $location = $this->locationDeserializer->deserialize($decodedMetaData->getCity());
             $this->predictionDeserializer->deserialize(
