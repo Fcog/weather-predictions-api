@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Contract\WeatherService;
 use App\Exception\CityNotFoundException;
 use App\Exception\InvalidDateException;
 use App\Exception\InvalidTempScaleException;
+use App\Service\WeatherService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

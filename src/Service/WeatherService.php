@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Contract\OutputFormatter;
-use App\Contract\WeatherService;
 use App\Exception\CityNotFoundException;
 use App\Exception\InvalidDateException;
 use App\Exception\InvalidTempScaleException;
@@ -11,7 +10,7 @@ use App\Repository\LocationRepository;
 use App\Repository\PredictionRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class MyWeatherService implements WeatherService
+class WeatherService
 {
     const MAX_DAYS = 10;
 

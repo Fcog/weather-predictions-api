@@ -5,7 +5,7 @@ namespace App\Tests\Integration;
 use App\DataFixtures\LocationFixtures;
 use App\DataFixtures\PredictionFixtures;
 use App\Exception\InvalidDateException;
-use App\Service\MyWeatherService;
+use App\Service\WeatherService;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -31,7 +31,7 @@ class PredictionsTest extends KernelTestCase
         $expectedResult = "Weather predictions in Amsterdam on {$today->format('F d, Y')}";
 
         // Do operations
-        $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $weatherService = static::getContainer()->get(WeatherService::class);
         $result = $weatherService->getWeather('Amsterdam');
 
         // Assert
@@ -49,7 +49,7 @@ class PredictionsTest extends KernelTestCase
         ];
 
         // Do operations
-        $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $weatherService = static::getContainer()->get(WeatherService::class);
         $result = $weatherService->getWeather('Amsterdam');
 
         // Assert
@@ -67,7 +67,7 @@ class PredictionsTest extends KernelTestCase
         ];
 
         // Do operations
-        $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $weatherService = static::getContainer()->get(WeatherService::class);
         $result = $weatherService->getWeather('Amsterdam', $today, 'fahrenheit');
 
         // Assert
@@ -85,7 +85,7 @@ class PredictionsTest extends KernelTestCase
         ];
 
         // Do operations
-        $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $weatherService = static::getContainer()->get(WeatherService::class);
         $result = $weatherService->getWeather('Amsterdam', $today, 'romer');
 
         // Assert
@@ -105,7 +105,7 @@ class PredictionsTest extends KernelTestCase
         ];
 
         // Do operations
-        $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $weatherService = static::getContainer()->get(WeatherService::class);
         $result = $weatherService->getWeather('Amsterdam', $date);
 
         // Assert
@@ -123,7 +123,7 @@ class PredictionsTest extends KernelTestCase
         $date->modify("+{$dayNumber} day");
 
         // Do operations
-        $weatherService = static::getContainer()->get(MyWeatherService::class);
+        $weatherService = static::getContainer()->get(WeatherService::class);
         $weatherService->getWeather('Amsterdam', $date);
     }
 }
