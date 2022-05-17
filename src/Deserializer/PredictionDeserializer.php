@@ -62,7 +62,7 @@ class PredictionDeserializer implements InputFormatter
         PartnerBase $partner
     ): Prediction
     {
-        $prediction = $this->predictionRepository->findBy([
+        $prediction = $this->predictionRepository->findOneBy([
             'partner_id' => $partner->getId(),
             'time' => $predictionData->getTime(),
             'date' => $partnerMetadata->getDate(),
@@ -80,6 +80,7 @@ class PredictionDeserializer implements InputFormatter
             $partnerMetadata->getTempScale(),
             $predictionData->getTemp()
         );
+
         $prediction->setTemperature($tempScale);
 
         return $prediction;

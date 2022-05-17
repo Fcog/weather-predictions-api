@@ -36,16 +36,22 @@ class ApiDataCollectionMockService implements DataCollection
             $decodedMetaData = $partner->denormalizeMetaData($decodedData);
             $decodedPredictionsData = $partner->denormalizePredictions($decodedData);
 
-            $location = $this->locationDeserializer->deserialize(
-                $decodedMetaData->getCity()
-            );
+            for ($i = 0; $i < 10; $i++) {
+                $date = new \DateTimeImmutable();
+                $day = $date->modify('+'.$i.' day');
+                $decodedMetaData->setDate($day);
 
-            $this->predictionDeserializer->deserialize(
-                $decodedPredictionsData,
-                $decodedMetaData,
-                $location,
-                $partner
-            );
+                $location = $this->locationDeserializer->deserialize(
+                    $decodedMetaData->getCity()
+                );
+
+                $this->predictionDeserializer->deserialize(
+                    $decodedPredictionsData,
+                    $decodedMetaData,
+                    $location,
+                    $partner
+                );
+            }
         }
     }
 

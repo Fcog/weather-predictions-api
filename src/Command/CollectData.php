@@ -33,8 +33,8 @@ class CollectData extends Command
             $output->writeln('Data collected');
 
             return Command::SUCCESS;
-        } catch (\Throwable) {
-            $output->writeln('Error collecting data');
+        } catch (\Throwable $throwable) {
+            $output->writeln('Error collecting data ' . $throwable->getMessage());
             return Command::FAILURE;
         }
     }
