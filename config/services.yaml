@@ -21,8 +21,9 @@ services:
             - '../src/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    App\Service\ApiDataCollectionService:
-        arguments: 
-            $partners: !tagged_iterator app.partner
+    # please note that last definitions always *replace* previous ones      
+    App\Contract\DataCollection:
+        class: App\Service\ApiDataCollectionMockService
+        arguments:
+            $partners: !tagged_iterator app.partner            
                 

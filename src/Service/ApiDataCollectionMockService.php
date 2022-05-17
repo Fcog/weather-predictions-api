@@ -5,19 +5,18 @@ namespace App\Service;
 use App\Contract\DataCollection;
 use App\Deserializer\LocationDeserializer;
 use App\Deserializer\PredictionDeserializer;
-use App\Partner\PartnerBase;
 use App\Exception\InvalidTempScaleException;
-use App\Exception\PartnerApiDataFetchException;
 use App\Exception\PartnerDataDecodeException;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Partner\PartnerBase;
+use Symfony\Component\DependencyInjection\Attribute\When;
 
-class ApiDataCollectionService implements DataCollection
+#[When(env: 'dev')]
+class ApiDataCollectionMockService implements DataCollection
 {
     /**
      * @param iterable<PartnerBase> $partners
      */
     public function __construct(
-        private HttpClientInterface $client,
         private PredictionDeserializer $predictionDeserializer,
         private LocationDeserializer $locationDeserializer,
         private iterable $partners
@@ -28,12 +27,10 @@ class ApiDataCollectionService implements DataCollection
     /**
      * @throws PartnerDataDecodeException
      * @throws InvalidTempScaleException
-     * @throws PartnerApiDataFetchException
      */
     public function collect(): void
     {
         foreach ($this->partners as $partner) {
-            // TODO fetch data for the upcoming 10 days
             $encodedData = $this->fetchData($partner);
             $decodedData = $partner->decode($encodedData);
             $decodedMetaData = $partner->denormalizeMetaData($decodedData);
@@ -52,17 +49,8 @@ class ApiDataCollectionService implements DataCollection
         }
     }
 
-    /**
-     * @throws PartnerApiDataFetchException
-     */
     private function fetchData(PartnerBase $partner): string
     {
-        try {
-            $response = $this->client->request('GET', $partner->getApiUrl());
-
-            return $response->getContent();
-        } catch (\Throwable) {
-            throw new PartnerApiDataFetchException();
-        }
+        return file_get_contents(__DIR__ . '/../../tests/data/temps.' . $partner->getFormat()->value);
     }
 }

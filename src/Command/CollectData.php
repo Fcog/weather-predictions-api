@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\ApiDataCollectionService;
+use App\Contract\DataCollection;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,7 +19,7 @@ class CollectData extends Command
     protected static $defaultName = 'app:collect-data';
 
     public function __construct(
-        private ApiDataCollectionService $apiDataCollectionService,
+        private DataCollection $dataCollection,
     )
     {
         parent::__construct();
@@ -28,8 +28,7 @@ class CollectData extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            // TODO Refactor to accept multiple types of data collection.
-            $this->apiDataCollectionService->collect();
+            $this->dataCollection->collect();
 
             $output->writeln('Data collected');
 

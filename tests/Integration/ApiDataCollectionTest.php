@@ -2,6 +2,7 @@
 
 namespace App\Tests\Integration;
 
+use App\Contract\DataCollection;
 use App\Repository\PredictionRepository;
 use App\Service\ApiDataCollectionService;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
@@ -21,7 +22,7 @@ class ApiDataCollectionTest extends KernelTestCase
     public function test_data_is_collected_correctly(): void
     {
         // Set data
-        $dataCollectionService = static::getContainer()->get(ApiDataCollectionService::class);
+        $dataCollectionService = static::getContainer()->get(DataCollection::class);
         $predictionRepo = static::getContainer()->get(PredictionRepository::class);
 
         // Do operations
